@@ -1,24 +1,67 @@
 <!doctype html>
-<html lang="en">
+<html lang="sv">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
-    <title>Lovable App</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-
-    <!-- TODO: Update og:title to match your application name -->
-    <meta property="og:title" content="Lovable App" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Norrskensstigen | Lyxig stuga i Stöten med Ski-in/Ski-out | Sälenfjällen</title>
+    <meta name="description" content="Hyr ett nybyggt timmerhus i Granfjällsbyn, Stöten. Ski-in/Ski-out, 12 bäddar, bastu & fjällutsikt. Perfekt för skidåkning, vandring & naturupplevelser året runt." />
+    <meta name="keywords" content="stuga Sälen, Stöten boende, ski-in ski-out, fjällstuga, timmerhus, Granfjällsbyn, skidåkning Sverige, familjesemester fjällen" />
+    <meta name="author" content="Norrskensstigen" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
+    <meta property="og:url" content="https://norrskensstigen.se/" />
+    <meta property="og:title" content="Norrskensstigen | Lyxig fjällstuga i Stöten" />
+    <meta property="og:description" content="Upplev den svenska fjällvärlden i ett nybyggt timmerhus med lodgekänsla. Ski-in/Ski-out med milsvid utsikt över de norska fjällen." />
+    <meta property="og:locale" content="sv_SE" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:locale:alternate" content="de_DE" />
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta name="twitter:title" content="Norrskensstigen | Lyxig fjällstuga i Stöten" />
+    <meta name="twitter:description" content="Upplev den svenska fjällvärlden i ett nybyggt timmerhus med lodgekänsla." />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://norrskensstigen.se/" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2d4a3e" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LodgingBusiness",
+        "name": "Norrskensstigen",
+        "description": "Lyxig fjällstuga med Ski-in/Ski-out i Stöten, Sälenfjällen",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Norrskensstigen 12A",
+          "addressLocality": "Granfjällsbyn",
+          "addressRegion": "Dalarna",
+          "postalCode": "782 67",
+          "addressCountry": "SE"
+        },
+        "amenityFeature": [
+          { "@type": "LocationFeatureSpecification", "name": "Ski-in/Ski-out" },
+          { "@type": "LocationFeatureSpecification", "name": "Sauna" },
+          { "@type": "LocationFeatureSpecification", "name": "Fireplace" },
+          { "@type": "LocationFeatureSpecification", "name": "Floor heating" },
+          { "@type": "LocationFeatureSpecification", "name": "WiFi" }
+        ],
+        "numberOfRooms": 4,
+        "petsAllowed": false,
+        "maximumAttendeeCapacity": 12
+      }
+    </script>
   </head>
-
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
