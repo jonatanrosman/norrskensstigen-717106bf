@@ -141,13 +141,13 @@ export const SeasonsSection = () => {
         </div>
 
         {/* Season Content */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
-          {/* Image - without badge */}
-          <div className="relative rounded-3xl overflow-hidden shadow-elevated group">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16">
+          {/* Image - consistent layout for both seasons */}
+          <div className="relative rounded-3xl overflow-hidden shadow-elevated group h-[300px] md:h-[400px]">
             <img
               src={seasonHeroImages[activeSeason]}
               alt={currentSeason.name}
-              className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-night-sky/40 via-transparent to-transparent" />
           </div>
@@ -178,52 +178,25 @@ export const SeasonsSection = () => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
-        {activeSeason === 'winter' ? (
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {winterGalleryImages.map((image, index) => (
-              <div 
-                key={index}
-                className="break-inside-avoid cursor-pointer group"
-                onClick={() => openLightbox(index)}
-              >
-                <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
-                  <img
-                    src={image}
-                    alt={`${currentSeason.name} ${index + 2}`}
-                    className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
-                </div>
+        {/* Gallery Grid - 3x3 for both seasons */}
+        <div className="grid grid-cols-3 gap-4">
+          {currentGalleryForLightbox.map((image, index) => (
+            <div 
+              key={index}
+              className="cursor-pointer group"
+              onClick={() => openLightbox(index)}
+            >
+              <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
+                <img
+                  src={image}
+                  alt={`${currentSeason.name} ${index + 2}`}
+                  className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {summerGalleryImagesWithSize.map((imageData, index) => (
-              <div 
-                key={index}
-                className={cn(
-                  "cursor-pointer group",
-                  imageData.large && "md:col-span-1 lg:col-span-1 row-span-1"
-                )}
-                onClick={() => openLightbox(index)}
-              >
-                <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 h-full">
-                  <img
-                    src={imageData.src}
-                    alt={`${currentSeason.name} ${index + 2}`}
-                    className={cn(
-                      "w-full object-cover transition-transform duration-500 group-hover:scale-105",
-                      imageData.large ? "aspect-[4/3]" : "aspect-square"
-                    )}
-                  />
-                  <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Lightbox */}

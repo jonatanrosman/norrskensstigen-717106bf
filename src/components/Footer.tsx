@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { Instagram, Facebook, Mail, Phone } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 export const Footer = () => {
   const { t } = useLanguage();
@@ -12,12 +13,12 @@ export const Footer = () => {
   ];
 
   return (
-    <footer id="contact" className="bg-night-sky text-primary-foreground py-16 md:py-20">
+    <footer className="bg-night-sky text-primary-foreground py-16 md:py-20">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <h3 className="font-serif text-3xl mb-3">Norrskensstigen</h3>
+            <img src={logo} alt="Norrskensstigen logo" className="h-12 w-auto mb-4" />
             <p className="text-primary-foreground/70 mb-6 max-w-md">
               {t.footer.tagline}
             </p>
