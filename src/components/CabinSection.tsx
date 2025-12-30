@@ -1,46 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   Mountain, Flame, ThermometerSun, Wifi, Tv, Gamepad2, 
   WashingMachine, Droplets, Wind, Bed, Bath, Home, SquareStack,
   X, ChevronLeft, ChevronRight
 } from 'lucide-react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
-// Import gallery images
-import livingRoom from '@/assets/living-room.jpg';
-import livingRoom2 from '@/assets/living-room-2.jpg';
-import fireplace from '@/assets/fireplace.jpg';
-import kitchen from '@/assets/kitchen.jpg';
-import diningEvening from '@/assets/dining-evening.jpg';
-import kitchenView from '@/assets/kitchen-view.jpg';
-import bedroom1 from '@/assets/bedroom-1.jpg';
-import bedroom2 from '@/assets/bedroom-2.jpg';
-import bunkRoom from '@/assets/bunk-room.jpg';
-import bathroom1 from '@/assets/bathroom-1.jpg';
-import bathroom2 from '@/assets/bathroom-2.jpg';
-import sauna from '@/assets/sauna.jpg';
-import panoramaWindow from '@/assets/panorama-window.jpg';
-import upperLoft from '@/assets/upper-loft.jpg';
-import viewChampagne from '@/assets/view-champagne.jpg';
+// Import gallery images (current 10, will add 8 more)
+import interior1 from '@/assets/interior/interior-1.jpg';
+import interior2 from '@/assets/interior/interior-2.jpg';
+import interior3 from '@/assets/interior/interior-3.jpg';
+import interior4 from '@/assets/interior/interior-4.jpg';
+import interior5 from '@/assets/interior/interior-5.jpg';
+import interior6 from '@/assets/interior/interior-6.jpg';
+import interior7 from '@/assets/interior/interior-7.jpg';
+import interior8 from '@/assets/interior/interior-8.jpg';
+import interior9 from '@/assets/interior/interior-9.jpg';
+import interior10 from '@/assets/interior/interior-10.jpg';
 
 const galleryImages = [
-  { src: livingRoom, alt: 'Vardagsrum' },
-  { src: livingRoom2, alt: 'Vardagsrum 2' },
-  { src: fireplace, alt: 'Braskamin' },
-  { src: panoramaWindow, alt: 'Panoramafönster' },
-  { src: viewChampagne, alt: 'Utsikt' },
-  { src: kitchen, alt: 'Kök' },
-  { src: diningEvening, alt: 'Matplats kväll' },
-  { src: kitchenView, alt: 'Köksutsikt' },
-  { src: bedroom1, alt: 'Sovrum 1' },
-  { src: bedroom2, alt: 'Sovrum 2' },
-  { src: bunkRoom, alt: 'Våningssängrum' },
-  { src: upperLoft, alt: 'Övre allrum' },
-  { src: bathroom1, alt: 'Badrum 1' },
-  { src: bathroom2, alt: 'Badrum 2' },
-  { src: sauna, alt: 'Bastu' },
+  { src: interior1, alt: 'Vardagsrum med högt i tak' },
+  { src: interior2, alt: 'Braskamin' },
+  { src: interior3, alt: 'Bastu' },
+  { src: interior4, alt: 'Kök och vardagsrum' },
+  { src: interior5, alt: 'Matplats och kök' },
+  { src: interior6, alt: 'Matplats med trappa' },
+  { src: interior7, alt: 'Trappa och fönster' },
+  { src: interior8, alt: 'Övre våning med utsikt' },
+  { src: interior9, alt: 'Allrum med balkong' },
+  { src: interior10, alt: 'Sovrum' },
 ];
 
 export const CabinSection = () => {
@@ -79,6 +68,30 @@ export const CabinSection = () => {
     }
   };
 
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedImage === null) return;
+      if (e.key === 'ArrowLeft') handlePrevImage();
+      if (e.key === 'ArrowRight') handleNextImage();
+      if (e.key === 'Escape') setSelectedImage(null);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImage]);
+
+  // Pinterest-style column distribution
+  const getColumnImages = () => {
+    const columns: typeof galleryImages[] = [[], [], []];
+    galleryImages.forEach((img, i) => {
+      columns[i % 3].push({ ...img, originalIndex: i } as typeof galleryImages[0] & { originalIndex: number });
+    });
+    return columns;
+  };
+
+  const columns = getColumnImages();
+
   return (
     <section id="cabin" className="py-24 md:py-32 bg-gradient-frost">
       <div className="container mx-auto px-4">
@@ -92,37 +105,34 @@ export const CabinSection = () => {
           </p>
         </div>
 
-        {/* Image Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-16">
-          {galleryImages.slice(0, 8).map((img, index) => (
-            <div 
-              key={index}
-              onClick={() => setSelectedImage(index)}
-              className={`relative overflow-hidden rounded-xl shadow-soft group cursor-pointer ${
-                index === 0 ? 'col-span-2 row-span-2' : ''
-              }`}
-            >
-              <img
-                src={img.src}
-                alt={img.alt}
-                className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ${
-                  index === 0 ? 'aspect-square' : 'aspect-[4/3]'
-                }`}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-night-sky/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Pinterest-style Masonry Gallery */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-16">
+          {columns.map((column, colIndex) => (
+            <div key={colIndex} className="flex flex-col gap-3 md:gap-4">
+              {column.map((img: typeof galleryImages[0] & { originalIndex?: number }, imgIndex) => {
+                const originalIndex = (img as { originalIndex?: number }).originalIndex ?? colIndex + imgIndex * 3;
+                // Vary heights for masonry effect
+                const heightClass = imgIndex % 2 === 0 ? 'aspect-[3/4]' : 'aspect-[4/3]';
+                if (colIndex === 1 && imgIndex === 0) {
+                  // Make first image in middle column taller
+                }
+                return (
+                  <div 
+                    key={originalIndex}
+                    onClick={() => setSelectedImage(originalIndex)}
+                    className="relative overflow-hidden rounded-xl shadow-soft group cursor-pointer"
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      className={`w-full object-cover group-hover:scale-105 transition-transform duration-700 ${heightClass}`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-night-sky/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
+                );
+              })}
             </div>
           ))}
-        </div>
-
-        {/* View more button */}
-        <div className="text-center mb-16">
-          <Button 
-            variant="outline" 
-            size="lg"
-            onClick={() => setSelectedImage(0)}
-          >
-            {t.cabin.gallery} ({galleryImages.length})
-          </Button>
         </div>
 
         {/* Stats */}
@@ -150,52 +160,57 @@ export const CabinSection = () => {
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <feature.icon className="w-6 h-6 text-primary" />
                 </div>
-                <span className="text-sm text-center text-foreground/80">{feature.label}</span>
+                <span className="text-sm text-center text-foreground/80 whitespace-nowrap">{feature.label}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Lightbox Dialog */}
-      <Dialog open={selectedImage !== null} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-5xl w-full p-0 bg-night-sky border-none">
-          <div className="relative">
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-night-sky/80 text-primary-foreground flex items-center justify-center hover:bg-night-sky transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            
-            <button
-              onClick={handlePrevImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-night-sky/80 text-primary-foreground flex items-center justify-center hover:bg-night-sky transition-colors"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            
-            <button
-              onClick={handleNextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-night-sky/80 text-primary-foreground flex items-center justify-center hover:bg-night-sky transition-colors"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
+      {/* Fullscreen Lightbox */}
+      {selectedImage !== null && (
+        <div 
+          className="fixed inset-0 z-50 bg-night-sky/95 flex items-center justify-center"
+          onClick={() => setSelectedImage(null)}
+        >
+          {/* Close button */}
+          <button
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-primary-foreground/10 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          {/* Previous button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-foreground/10 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
+          </button>
+          
+          {/* Next button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-foreground/10 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+          >
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
+          </button>
 
-            {selectedImage !== null && (
-              <img
-                src={galleryImages[selectedImage].src}
-                alt={galleryImages[selectedImage].alt}
-                className="w-full max-h-[80vh] object-contain"
-              />
-            )}
-            
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-primary-foreground/70 text-sm">
-              {selectedImage !== null && `${selectedImage + 1} / ${galleryImages.length}`}
-            </div>
+          {/* Image */}
+          <img
+            src={galleryImages[selectedImage].src}
+            alt={galleryImages[selectedImage].alt}
+            className="max-w-[90vw] max-h-[85vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+          
+          {/* Image counter */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary-foreground/70 text-sm bg-night-sky/50 px-4 py-2 rounded-full">
+            {selectedImage + 1} / {galleryImages.length}
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      )}
     </section>
   );
 };
