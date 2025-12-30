@@ -27,7 +27,7 @@ export const translations = {
       sqm: 'Kvadratmeter',
       gallery: 'Se fler bilder',
       features: {
-        skiInOut: 'Ski-in/Ski-out',
+        skiInOut: 'Ski\u2011in/Ski\u2011out',
         mountainView: 'Fjällutsikt',
         fireplace: 'Braskamin',
         floorHeating: 'Golvvärme',
