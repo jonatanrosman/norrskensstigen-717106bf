@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { Instagram, Facebook, Mail, Phone } from 'lucide-react';
@@ -70,12 +71,9 @@ export const Footer = () => {
             © {new Date().getFullYear()} Norrskensstigen. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-sm text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors">
+            <Link to="/villkor" className="text-sm text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors">
               {t.footer.terms}
-            </a>
-            <a href="#" className="text-sm text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors">
-              {t.footer.privacy}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

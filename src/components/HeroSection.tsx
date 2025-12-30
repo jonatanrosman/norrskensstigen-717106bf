@@ -48,7 +48,7 @@ export const HeroSection = ({ heroImage }: HeroSectionProps) => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           <p className="text-primary-foreground/70 text-sm tracking-[0.3em] uppercase mb-4 animate-fade-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-            Granfjällsbyn, Stöten
+            Stöten, Sälenfjällen
           </p>
           
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-primary-foreground mb-6 animate-fade-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
