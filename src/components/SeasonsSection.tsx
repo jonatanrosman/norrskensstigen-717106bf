@@ -41,9 +41,17 @@ const winterGalleryImages = [
   winter7, winter8, winter9, winter10
 ];
 
-const summerGalleryImages = [
-  summer2, summer3, summer4, summer5, summer6,
-  summer7, summer8, summer9, summer10
+// Summer gallery with size hints for layout (02-04 larger, 05-10 smaller)
+const summerGalleryImagesWithSize: { src: string; large: boolean }[] = [
+  { src: summer2, large: true },
+  { src: summer3, large: true },
+  { src: summer4, large: true },
+  { src: summer5, large: false },
+  { src: summer6, large: false },
+  { src: summer7, large: false },
+  { src: summer8, large: false },
+  { src: summer9, large: false },
+  { src: summer10, large: false },
 ];
 
 export const SeasonsSection = () => {
@@ -52,10 +60,11 @@ export const SeasonsSection = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const galleryImages = {
-    winter: winterGalleryImages,
-    summer: summerGalleryImages,
-  };
+  // For winter, use simple string array
+  // For summer, extract just the src for lightbox compatibility
+  const currentGalleryForLightbox = activeSeason === 'winter' 
+    ? winterGalleryImages 
+    : summerGalleryImagesWithSize.map(img => img.src);
 
   const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
     { id: 'winter', icon: Snowflake, color: 'from-blue-400 to-cyan-300' },
@@ -63,7 +72,6 @@ export const SeasonsSection = () => {
   ];
 
   const currentSeason = t.seasons[activeSeason];
-  const currentGallery = galleryImages[activeSeason];
 
   const openLightbox = (index: number) => {
     setCurrentImageIndex(index);
@@ -76,13 +84,13 @@ export const SeasonsSection = () => {
 
   const goToPrevious = () => {
     setCurrentImageIndex((prev) => 
-      prev === 0 ? currentGallery.length - 1 : prev - 1
+      prev === 0 ? currentGalleryForLightbox.length - 1 : prev - 1
     );
   };
 
   const goToNext = () => {
     setCurrentImageIndex((prev) => 
-      prev === currentGallery.length - 1 ? 0 : prev + 1
+      prev === currentGalleryForLightbox.length - 1 ? 0 : prev + 1
     );
   };
 
@@ -134,7 +142,7 @@ export const SeasonsSection = () => {
 
         {/* Season Content */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
-          {/* Image */}
+          {/* Image - without badge */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated group">
             <img
               src={seasonHeroImages[activeSeason]}
@@ -142,16 +150,6 @@ export const SeasonsSection = () => {
               className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-night-sky/40 via-transparent to-transparent" />
-            
-            {/* Season Badge */}
-            <div className="absolute top-6 left-6">
-              <div className={cn(
-                "px-4 py-2 rounded-full bg-gradient-to-r text-white font-medium shadow-lg",
-                seasons.find(s => s.id === activeSeason)?.color
-              )}>
-                {currentSeason.name}
-              </div>
-            </div>
           </div>
 
           {/* Content */}
@@ -181,9 +179,9 @@ export const SeasonsSection = () => {
         </div>
 
         {/* Gallery Grid */}
-        {currentGallery.length > 0 && (
+        {activeSeason === 'winter' ? (
           <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {currentGallery.map((image, index) => (
+            {winterGalleryImages.map((image, index) => (
               <div 
                 key={index}
                 className="break-inside-avoid cursor-pointer group"
@@ -194,6 +192,31 @@ export const SeasonsSection = () => {
                     src={image}
                     alt={`${currentSeason.name} ${index + 2}`}
                     className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {summerGalleryImagesWithSize.map((imageData, index) => (
+              <div 
+                key={index}
+                className={cn(
+                  "cursor-pointer group",
+                  imageData.large && "md:col-span-1 lg:col-span-1 row-span-1"
+                )}
+                onClick={() => openLightbox(index)}
+              >
+                <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 h-full">
+                  <img
+                    src={imageData.src}
+                    alt={`${currentSeason.name} ${index + 2}`}
+                    className={cn(
+                      "w-full object-cover transition-transform duration-500 group-hover:scale-105",
+                      imageData.large ? "aspect-[4/3]" : "aspect-square"
+                    )}
                   />
                   <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
                 </div>
@@ -229,7 +252,7 @@ export const SeasonsSection = () => {
 
           {/* Image */}
           <img
-            src={currentGallery[currentImageIndex]}
+            src={currentGalleryForLightbox[currentImageIndex]}
             alt={`${currentSeason.name} ${currentImageIndex + 2}`}
             className="max-h-[90vh] max-w-[90vw] object-contain"
             onClick={(e) => e.stopPropagation()}
@@ -245,7 +268,7 @@ export const SeasonsSection = () => {
 
           {/* Image counter */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 text-sm">
-            {currentImageIndex + 1} / {currentGallery.length}
+            {currentImageIndex + 1} / {currentGalleryForLightbox.length}
           </div>
         </div>
       )}

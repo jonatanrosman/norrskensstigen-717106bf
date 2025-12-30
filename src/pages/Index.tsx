@@ -3,7 +3,6 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { CabinSection } from '@/components/CabinSection';
 import { SeasonsSection } from '@/components/SeasonsSection';
-import { BookingSection } from '@/components/BookingSection';
 import { LocationSection } from '@/components/LocationSection';
 import { ContactForm } from '@/components/ContactForm';
 import { Footer } from '@/components/Footer';
@@ -20,7 +19,6 @@ const Index = () => {
           <HeroSection heroImage={heroWinter} />
           <CabinSection />
           <SeasonsSection />
-          <BookingSection />
           <LocationSection />
           <ContactForm />
         </main>
