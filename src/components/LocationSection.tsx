@@ -9,6 +9,8 @@ export const LocationSection = () => {
     { icon: Mountain, label: t.location.trysil, distance: t.location.trysilDistance },
   ];
 
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Norrskensstigen 12A, 780 67 Sälen, Sweden')}`;
+
   return (
     <section className="py-24 md:py-32 bg-secondary">
       <div className="container mx-auto px-4">
@@ -34,10 +36,15 @@ export const LocationSection = () => {
               <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
                 {t.location.title}
               </h2>
-              <div className="flex items-start gap-3 text-lg text-muted-foreground">
-                <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <span>{t.location.address}</span>
-              </div>
+              <a 
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 text-lg text-muted-foreground hover:text-primary transition-colors group"
+              >
+                <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1 group-hover:scale-110 transition-transform" />
+                <span className="underline-offset-4 group-hover:underline">{t.location.address}</span>
+              </a>
             </div>
 
             <div className="space-y-4">

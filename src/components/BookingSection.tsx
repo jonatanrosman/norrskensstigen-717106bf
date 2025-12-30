@@ -1,41 +1,98 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { format } from 'date-fns';
+import { format, addDays, isSaturday, nextSaturday, isWithinInterval, startOfDay } from 'date-fns';
 import { sv, enUS, de } from 'date-fns/locale';
-import { CalendarIcon, Users, RefreshCw, ExternalLink } from 'lucide-react';
+import { CalendarIcon, Users, RefreshCw, ExternalLink, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+// Winter season dates (these could be made configurable)
+const WINTER_SEASONS = [
+  { start: new Date(2025, 11, 13), end: new Date(2026, 3, 19) }, // Dec 13, 2025 - Apr 19, 2026
+  { start: new Date(2026, 11, 12), end: new Date(2027, 3, 18) }, // Dec 12, 2026 - Apr 18, 2027
+];
+
+const isWinterSeason = (date: Date): boolean => {
+  return WINTER_SEASONS.some(season => 
+    isWithinInterval(startOfDay(date), { start: startOfDay(season.start), end: startOfDay(season.end) })
+  );
+};
+
+const getNextWinterSaturday = (date: Date): Date => {
+  if (isSaturday(date)) return date;
+  return nextSaturday(date);
+};
 
 export const BookingSection = () => {
   const { t, language } = useLanguage();
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [guests, setGuests] = useState<string>('');
+  const [isWinter, setIsWinter] = useState(false);
 
   const locales = { sv, en: enUS, de };
   const currentLocale = locales[language];
 
+  useEffect(() => {
+    if (checkIn) {
+      const winterCheck = isWinterSeason(checkIn);
+      setIsWinter(winterCheck);
+      
+      if (winterCheck) {
+        // Auto-set checkout to 7 days later (Saturday to Saturday)
+        setCheckOut(addDays(checkIn, 7));
+      }
+    }
+  }, [checkIn]);
+
+  const handleCheckInSelect = (date: Date | undefined) => {
+    if (!date) return;
+    
+    if (isWinterSeason(date)) {
+      // Force Saturday selection for winter
+      const saturday = getNextWinterSaturday(date);
+      setCheckIn(saturday);
+      setCheckOut(addDays(saturday, 7));
+    } else {
+      setCheckIn(date);
+      setCheckOut(undefined);
+    }
+  };
+
   const handleBooking = () => {
-    // In a real implementation, this would integrate with a booking system
-    // that syncs with Airbnb via iCal
     const params = new URLSearchParams({
       checkIn: checkIn?.toISOString() || '',
       checkOut: checkOut?.toISOString() || '',
       guests: guests,
     });
     
-    // This would redirect to the booking confirmation page
     console.log('Booking params:', params.toString());
     
-    // Show toast or modal for demo purposes
     alert(language === 'sv' 
       ? 'Bokningsförfrågan skickad! Vi kontaktar dig inom 24 timmar.' 
       : language === 'de'
       ? 'Buchungsanfrage gesendet! Wir kontaktieren Sie innerhalb von 24 Stunden.'
       : 'Booking request sent! We will contact you within 24 hours.');
+  };
+
+  const disabledCheckInDays = (date: Date) => {
+    if (date < new Date()) return true;
+    if (isWinterSeason(date) && !isSaturday(date)) return true;
+    return false;
+  };
+
+  const disabledCheckOutDays = (date: Date) => {
+    if (!checkIn) return true;
+    if (date <= checkIn) return true;
+    if (isWinter) {
+      // During winter, only allow exactly 7 days after check-in
+      const expectedCheckout = addDays(checkIn, 7);
+      return date.getTime() !== expectedCheckout.getTime();
+    }
+    return false;
   };
 
   return (
@@ -58,8 +115,28 @@ export const BookingSection = () => {
             </p>
           </div>
 
+          {/* Winter Season Notice */}
+          <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-primary-foreground/80 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-primary-foreground/80">
+              {t.booking.winterNotice}
+            </p>
+          </div>
+
           {/* Booking Form */}
           <div className="bg-card/95 backdrop-blur-md rounded-3xl p-6 md:p-10 shadow-elevated">
+            {/* Season Indicator */}
+            {checkIn && (
+              <div className={cn(
+                "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-6",
+                isWinter 
+                  ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300" 
+                  : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+              )}>
+                {isWinter ? t.booking.winterSeason : t.booking.otherSeason}
+              </div>
+            )}
+
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {/* Check-in */}
               <div className="space-y-2">
@@ -81,11 +158,18 @@ export const BookingSection = () => {
                     <Calendar
                       mode="single"
                       selected={checkIn}
-                      onSelect={setCheckIn}
+                      onSelect={handleCheckInSelect}
                       initialFocus
                       locale={currentLocale}
-                      disabled={(date) => date < new Date()}
+                      disabled={disabledCheckInDays}
                     />
+                    <div className="p-3 border-t text-xs text-muted-foreground">
+                      {language === 'sv' 
+                        ? 'Vintersäsong: Endast lördagar valbara' 
+                        : language === 'de'
+                        ? 'Wintersaison: Nur Samstage wählbar'
+                        : 'Winter season: Only Saturdays selectable'}
+                    </div>
                   </PopoverContent>
                 </Popover>
               </div>
@@ -99,23 +183,27 @@ export const BookingSection = () => {
                       variant="outline"
                       className={cn(
                         "w-full justify-start text-left font-normal h-14",
-                        !checkOut && "text-muted-foreground"
+                        !checkOut && "text-muted-foreground",
+                        isWinter && "opacity-70 cursor-not-allowed"
                       )}
+                      disabled={isWinter}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {checkOut ? format(checkOut, "PPP", { locale: currentLocale }) : <span>---</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={checkOut}
-                      onSelect={setCheckOut}
-                      initialFocus
-                      locale={currentLocale}
-                      disabled={(date) => date < (checkIn || new Date())}
-                    />
-                  </PopoverContent>
+                  {!isWinter && (
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkOut}
+                        onSelect={setCheckOut}
+                        initialFocus
+                        locale={currentLocale}
+                        disabled={disabledCheckOutDays}
+                      />
+                    </PopoverContent>
+                  )}
                 </Popover>
               </div>
 
@@ -166,15 +254,6 @@ export const BookingSection = () => {
               className="flex items-center gap-2 px-6 py-3 bg-card/50 backdrop-blur-sm rounded-full text-primary-foreground/80 hover:text-primary-foreground hover:bg-card/70 transition-all duration-300"
             >
               <span className="font-medium">Airbnb</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-            <a 
-              href="https://booking.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 bg-card/50 backdrop-blur-sm rounded-full text-primary-foreground/80 hover:text-primary-foreground hover:bg-card/70 transition-all duration-300"
-            >
-              <span className="font-medium">Booking.com</span>
               <ExternalLink className="w-4 h-4" />
             </a>
           </div>

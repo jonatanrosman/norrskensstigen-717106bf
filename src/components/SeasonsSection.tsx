@@ -1,28 +1,25 @@
 import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
-import { Snowflake, Flower2, Sun, Leaf, Check } from 'lucide-react';
+import { Snowflake, Sun, Check } from 'lucide-react';
 
-interface SeasonsSectionProps {
-  seasonImages: {
-    winter: string;
-    spring: string;
-    summer: string;
-    autumn: string;
-  };
-}
+import seasonWinter from '@/assets/season-winter.jpg';
+import seasonSummer from '@/assets/season-summer.jpg';
 
-type Season = 'winter' | 'spring' | 'summer' | 'autumn';
+type Season = 'winter' | 'summer';
 
-export const SeasonsSection = ({ seasonImages }: SeasonsSectionProps) => {
+export const SeasonsSection = () => {
   const { t } = useLanguage();
   const [activeSeason, setActiveSeason] = useState<Season>('winter');
 
+  const seasonImages = {
+    winter: seasonWinter,
+    summer: seasonSummer,
+  };
+
   const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
     { id: 'winter', icon: Snowflake, color: 'from-blue-400 to-cyan-300' },
-    { id: 'spring', icon: Flower2, color: 'from-pink-400 to-rose-300' },
-    { id: 'summer', icon: Sun, color: 'from-yellow-400 to-orange-300' },
-    { id: 'autumn', icon: Leaf, color: 'from-orange-400 to-amber-500' },
+    { id: 'summer', icon: Sun, color: 'from-green-400 to-emerald-500' },
   ];
 
   const currentSeason = t.seasons[activeSeason];
@@ -44,7 +41,7 @@ export const SeasonsSection = ({ seasonImages }: SeasonsSectionProps) => {
         </div>
 
         {/* Season Tabs */}
-        <div className="flex justify-center gap-2 sm:gap-4 mb-12 flex-wrap">
+        <div className="flex justify-center gap-4 mb-12">
           {seasons.map((season) => {
             const Icon = season.icon;
             const isActive = activeSeason === season.id;
@@ -53,14 +50,14 @@ export const SeasonsSection = ({ seasonImages }: SeasonsSectionProps) => {
                 key={season.id}
                 onClick={() => setActiveSeason(season.id)}
                 className={cn(
-                  "flex items-center gap-2 px-4 sm:px-6 py-3 rounded-full font-medium transition-all duration-300",
+                  "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
                   isActive
                     ? "bg-primary text-primary-foreground shadow-elevated scale-105"
                     : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
                 )}
               >
                 <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
-                <span className="hidden sm:inline">{t.seasons[season.id].name}</span>
+                <span>{t.seasons[season.id].name}</span>
               </button>
             );
           })}
