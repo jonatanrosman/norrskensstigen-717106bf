@@ -216,7 +216,7 @@ export const ContactForm = () => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={checkInDate} onSelect={handleCheckInSelect} disabled={disabledDays} locale={dateLocale} initialFocus className="pointer-events-auto" />
+                    <Calendar mode="single" selected={checkInDate} onSelect={handleCheckInSelect} disabled={disabledDays} locale={dateLocale} initialFocus showWeekNumber className="pointer-events-auto" />
                   </PopoverContent>
                 </Popover>
                 {isWinter && (

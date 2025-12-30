@@ -52,18 +52,12 @@ export const Header = () => {
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2.5 group">
+        <a href="#" className="flex items-center gap-3 group">
           <img 
             src={logo} 
             alt="Norrskensstigen logo" 
-            className="w-8 h-8 rounded-md"
+            className="h-10 w-auto"
           />
-          <span className={cn(
-            "font-serif text-2xl font-semibold tracking-tight transition-colors duration-300",
-            isScrolled ? "text-foreground" : "text-primary-foreground"
-          )}>
-            Norrskensstigen
-          </span>
         </a>
 
         {/* Desktop Navigation */}
