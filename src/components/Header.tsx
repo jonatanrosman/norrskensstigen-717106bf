@@ -3,6 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 export const Header = () => {
   const { t } = useLanguage();
@@ -38,7 +39,6 @@ export const Header = () => {
   const navLinks = [
     { href: '#cabin', label: t.nav.cabin },
     { href: '#seasons', label: t.nav.seasons },
-    { href: '#booking', label: t.nav.booking },
     { href: '#contact', label: t.nav.contact },
   ];
 
@@ -52,7 +52,12 @@ export const Header = () => {
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2 group">
+        <a href="#" className="flex items-center gap-2.5 group">
+          <img 
+            src={logo} 
+            alt="Norrskensstigen logo" 
+            className="w-8 h-8 rounded-md"
+          />
           <span className={cn(
             "font-serif text-2xl font-semibold tracking-tight transition-colors duration-300",
             isScrolled ? "text-foreground" : "text-primary-foreground"

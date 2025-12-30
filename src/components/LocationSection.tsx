@@ -1,8 +1,12 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { MapPin, Plane, Mountain } from 'lucide-react';
+import { MapPin, Plane, Mountain, Map } from 'lucide-react';
+import skiSlopeMap from '@/assets/ski-slope-map.png';
+import { useState } from 'react';
+import { X } from 'lucide-react';
 
 export const LocationSection = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const distances = [
     { icon: Plane, label: t.location.airport, distance: t.location.airportDistance },
@@ -67,7 +71,49 @@ export const LocationSection = () => {
             </div>
           </div>
         </div>
+
+        {/* Ski Slope Map */}
+        <div className="mt-16">
+          <div className="flex items-center gap-3 mb-6">
+            <Map className="w-6 h-6 text-primary" />
+            <h3 className="font-serif text-2xl md:text-3xl text-foreground">
+              {language === 'sv' ? 'Stugans läge på pistkartan' : language === 'de' ? 'Lage der Hütte auf der Pistenkarte' : 'Cabin location on the ski slope map'}
+            </h3>
+          </div>
+          <div 
+            className="relative rounded-3xl overflow-hidden shadow-elevated cursor-pointer group"
+            onClick={() => setLightboxOpen(true)}
+          >
+            <img 
+              src={skiSlopeMap} 
+              alt="Ski slope map showing Norrskensstigen 12A location"
+              className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+            <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/10 transition-colors duration-300" />
+          </div>
+        </div>
       </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-night-sky/95 flex items-center justify-center"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors z-10"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <img
+            src={skiSlopeMap}
+            alt="Ski slope map showing Norrskensstigen 12A location"
+            className="max-h-[95vh] max-w-[95vw] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </section>
   );
 };
