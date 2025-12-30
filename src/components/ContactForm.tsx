@@ -7,7 +7,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { Send, CalendarIcon, Info } from 'lucide-react';
-import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay } from 'date-fns';
+import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay, parse } from 'date-fns';
 import { sv, enGB, de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
@@ -85,10 +85,40 @@ export const ContactForm = () => {
     }
   };
 
+  const bookedWinterCheckInDays = useMemo(() => {
+    const parseStartDate = (range: string) => {
+      // Examples:
+      // - "13/12 - 20/12 2025"
+      // - "27/12 2025 - 3/1 2026"
+      // - "3/1 - 10/1 2026"
+      const [startPartRaw] = range.split('-');
+      const startPart = (startPartRaw || '').trim();
+
+      const years = (range.match(/\b\d{4}\b/g) || []).map((y) => Number(y));
+      const yearFromStart = (startPart.match(/\b\d{4}\b/) || [])[0];
+      const year = yearFromStart ? Number(yearFromStart) : years[0];
+
+      const dm = startPart.replace(/\b\d{4}\b/, '').trim();
+      // date-fns parse expects leading zeros, but is tolerant with "d/M"
+      return parse(`${dm} ${year}`, 'd/M yyyy', new Date());
+    };
+
+    return winterPricing
+      .filter((row) => row.status === 'Bokad')
+      .map((row) => startOfDay(parseStartDate(row.dates)))
+      .filter((d) => !Number.isNaN(d.getTime()));
+  }, []);
+
   const disabledDays = (date: Date) => {
+    const day = startOfDay(date);
     const today = startOfDay(new Date());
-    if (isBefore(date, today)) return true;
-    if (isWinterSeason(date) && !isSaturday(date)) return true;
+    if (isBefore(day, today)) return true;
+
+    if (isWinterSeason(day)) {
+      if (!isSaturday(day)) return true;
+      if (bookedWinterCheckInDays.some((d) => d.getTime() === day.getTime())) return true;
+    }
+
     return false;
   };
 
@@ -129,42 +159,47 @@ export const ContactForm = () => {
             {/* Pricing Section */}
             <div className="space-y-8">
               {/* Winter Pricing */}
-              <div className="bg-card rounded-3xl p-6 md:p-8 shadow-elevated">
-                <h3 className="font-serif text-2xl text-foreground mb-4">{pricingTitle}</h3>
-                <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
-                  <Info className="w-4 h-4" />
-                  {cleaningIncluded}
-                </p>
-                <div className="max-h-[400px] overflow-y-auto pr-2">
-                  <table className="w-full text-sm">
-                    <thead className="sticky top-0 bg-card">
-                      <tr className="border-b border-border">
-                        <th className="text-left py-2 font-medium text-muted-foreground">{weekLabel}</th>
-                        <th className="text-left py-2 font-medium text-muted-foreground">Datum</th>
-                        <th className="text-right py-2 font-medium text-muted-foreground">Pris</th>
-                        <th className="text-right py-2 font-medium text-muted-foreground">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {winterPricing.map((row) => (
-                        <tr key={row.week} className="border-b border-border/50">
-                          <td className="py-2 text-foreground">{row.week}</td>
-                          <td className="py-2 text-foreground text-xs">{row.dates}{row.note && <span className="text-muted-foreground ml-1">({row.note})</span>}</td>
-                          <td className="py-2 text-right font-medium text-foreground">{row.price}</td>
-                          <td className="py-2 text-right">
-                            <span className={cn(
-                              "px-2 py-0.5 rounded-full text-xs font-medium",
-                              row.status === 'Ledig' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                            )}>
-                              {row.status === 'Ledig' ? statusAvailable : statusBooked}
-                            </span>
-                          </td>
+                <div className="bg-card rounded-3xl p-6 md:p-8 shadow-elevated">
+                  <h3 className="font-serif text-2xl text-foreground mb-4">{pricingTitle}</h3>
+                  <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
+                    <Info className="w-4 h-4" />
+                    {cleaningIncluded}
+                  </p>
+                  <div>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border">
+                          <th className="text-left py-2 font-medium text-muted-foreground">{weekLabel}</th>
+                          <th className="text-left py-2 font-medium text-muted-foreground">Datum</th>
+                          <th className="text-right py-2 font-medium text-muted-foreground">Pris</th>
+                          <th className="text-right py-2 font-medium text-muted-foreground">Status</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {winterPricing.map((row) => (
+                          <tr key={row.week} className="border-b border-border/50">
+                            <td className="py-2 text-foreground">{row.week}</td>
+                            <td className="py-2 text-foreground text-xs">
+                              {row.dates}
+                              {row.note && <span className="text-muted-foreground ml-1">({row.note})</span>}
+                            </td>
+                            <td className="py-2 text-right font-medium text-foreground">{row.price}</td>
+                            <td className="py-2 text-right">
+                              <span
+                                className={cn(
+                                  "px-2 py-0.5 rounded-full text-xs font-medium",
+                                  row.status === 'Ledig' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                )}
+                              >
+                                {row.status === 'Ledig' ? statusAvailable : statusBooked}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
 
               {/* Summer Pricing */}
               <div className="bg-card rounded-2xl p-6 shadow-soft">

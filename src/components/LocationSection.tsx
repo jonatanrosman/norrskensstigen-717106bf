@@ -35,8 +35,18 @@ export const LocationSection = () => {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Location map"
-              className="grayscale hover:grayscale-0 transition-all duration-700"
+              className="transition-all duration-700"
             />
+
+            {/* Visual pin overlay (Google embed can't be styled internally) */}
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full">
+                <div className="relative">
+                  <div className="absolute inset-0 blur-md bg-primary/30 rounded-full" />
+                  <MapPin className="relative w-10 h-10 text-primary drop-shadow" />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Content */}
