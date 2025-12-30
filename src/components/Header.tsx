@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,24 @@ export const Header = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const smoothScrollTo = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+    setIsMobileMenuOpen(false);
   }, []);
 
   const navLinks = [
@@ -49,6 +67,7 @@ export const Header = () => {
             <a
               key={link.href}
               href={link.href}
+              onClick={(e) => smoothScrollTo(e, link.href)}
               className={cn(
                 "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                 isScrolled
@@ -92,7 +111,7 @@ export const Header = () => {
             <a
               key={link.href}
               href={link.href}
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={(e) => smoothScrollTo(e, link.href)}
               className="text-foreground/80 hover:text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
             >
               {link.label}
