@@ -9,7 +9,7 @@ export const Footer = () => {
 
   const socialLinks = [
     { icon: Instagram, href: 'https://instagram.com/norrskensstigen.se', label: 'Instagram' },
-    { icon: Facebook, href: 'https://facebook.com/norrskensstigen', label: 'Facebook' },
+    { icon: Facebook, href: 'https://www.facebook.com/norrskensstigen.se', label: 'Facebook' },
   ];
 
   return (
