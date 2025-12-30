@@ -3,10 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { Snowflake, Sun, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import seasonWinter from '@/assets/season-winter.jpg';
-import seasonSummer from '@/assets/season-summer.jpg';
-
-// Winter gallery images
+// Winter images - 01 as hero, 02-10 as gallery
 import winter1 from '@/assets/seasons/winter-1.jpg';
 import winter2 from '@/assets/seasons/winter-2.jpg';
 import winter3 from '@/assets/seasons/winter-3.jpg';
@@ -18,26 +15,42 @@ import winter8 from '@/assets/seasons/winter-8.jpg';
 import winter9 from '@/assets/seasons/winter-9.jpg';
 import winter10 from '@/assets/seasons/winter-10.jpg';
 
+// Summer images - 01 as hero, 02-10 as gallery
+import summer1 from '@/assets/seasons/summer-1.jpg';
+import summer2 from '@/assets/seasons/summer-2.jpg';
+import summer3 from '@/assets/seasons/summer-3.jpg';
+import summer4 from '@/assets/seasons/summer-4.jpg';
+import summer5 from '@/assets/seasons/summer-5.jpg';
+import summer6 from '@/assets/seasons/summer-6.jpg';
+import summer7 from '@/assets/seasons/summer-7.jpg';
+import summer8 from '@/assets/seasons/summer-8.jpg';
+import summer9 from '@/assets/seasons/summer-9.jpg';
+import summer10 from '@/assets/seasons/summer-10.jpg';
+
 type Season = 'winter' | 'summer';
 
+// Hero images (image 01)
+const seasonHeroImages = {
+  winter: winter1,
+  summer: summer1,
+};
+
+// Gallery images (images 02-10)
 const winterGalleryImages = [
-  winter1, winter2, winter3, winter4, winter5,
-  winter6, winter7, winter8, winter9, winter10
+  winter2, winter3, winter4, winter5, winter6,
+  winter7, winter8, winter9, winter10
 ];
 
-// Placeholder for summer gallery - will be replaced with actual images
-const summerGalleryImages: string[] = [];
+const summerGalleryImages = [
+  summer2, summer3, summer4, summer5, summer6,
+  summer7, summer8, summer9, summer10
+];
 
 export const SeasonsSection = () => {
   const { t } = useLanguage();
   const [activeSeason, setActiveSeason] = useState<Season>('winter');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const seasonImages = {
-    winter: seasonWinter,
-    summer: seasonSummer,
-  };
 
   const galleryImages = {
     winter: winterGalleryImages,
@@ -124,7 +137,7 @@ export const SeasonsSection = () => {
           {/* Image */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated group">
             <img
-              src={seasonImages[activeSeason]}
+              src={seasonHeroImages[activeSeason]}
               alt={currentSeason.name}
               className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -179,7 +192,7 @@ export const SeasonsSection = () => {
                 <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
                   <img
                     src={image}
-                    alt={`${currentSeason.name} ${index + 1}`}
+                    alt={`${currentSeason.name} ${index + 2}`}
                     className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
@@ -217,7 +230,7 @@ export const SeasonsSection = () => {
           {/* Image */}
           <img
             src={currentGallery[currentImageIndex]}
-            alt={`${currentSeason.name} ${currentImageIndex + 1}`}
+            alt={`${currentSeason.name} ${currentImageIndex + 2}`}
             className="max-h-[90vh] max-w-[90vw] object-contain"
             onClick={(e) => e.stopPropagation()}
           />
