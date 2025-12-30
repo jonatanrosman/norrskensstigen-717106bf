@@ -1,20 +1,47 @@
 import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
-import { Snowflake, Sun, Check } from 'lucide-react';
+import { Snowflake, Sun, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import seasonWinter from '@/assets/season-winter.jpg';
 import seasonSummer from '@/assets/season-summer.jpg';
 
+// Winter gallery images
+import winter1 from '@/assets/seasons/winter-1.jpg';
+import winter2 from '@/assets/seasons/winter-2.jpg';
+import winter3 from '@/assets/seasons/winter-3.jpg';
+import winter4 from '@/assets/seasons/winter-4.jpg';
+import winter5 from '@/assets/seasons/winter-5.jpg';
+import winter6 from '@/assets/seasons/winter-6.jpg';
+import winter7 from '@/assets/seasons/winter-7.jpg';
+import winter8 from '@/assets/seasons/winter-8.jpg';
+import winter9 from '@/assets/seasons/winter-9.jpg';
+import winter10 from '@/assets/seasons/winter-10.jpg';
+
 type Season = 'winter' | 'summer';
+
+const winterGalleryImages = [
+  winter1, winter2, winter3, winter4, winter5,
+  winter6, winter7, winter8, winter9, winter10
+];
+
+// Placeholder for summer gallery - will be replaced with actual images
+const summerGalleryImages: string[] = [];
 
 export const SeasonsSection = () => {
   const { t } = useLanguage();
   const [activeSeason, setActiveSeason] = useState<Season>('winter');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const seasonImages = {
     winter: seasonWinter,
     summer: seasonSummer,
+  };
+
+  const galleryImages = {
+    winter: winterGalleryImages,
+    summer: summerGalleryImages,
   };
 
   const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
@@ -23,6 +50,35 @@ export const SeasonsSection = () => {
   ];
 
   const currentSeason = t.seasons[activeSeason];
+  const currentGallery = galleryImages[activeSeason];
+
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const goToPrevious = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? currentGallery.length - 1 : prev - 1
+    );
+  };
+
+  const goToNext = () => {
+    setCurrentImageIndex((prev) => 
+      prev === currentGallery.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') goToPrevious();
+    if (e.key === 'ArrowRight') goToNext();
+  };
 
   return (
     <section id="seasons" className="py-24 md:py-32 bg-background relative overflow-hidden">
@@ -64,7 +120,7 @@ export const SeasonsSection = () => {
         </div>
 
         {/* Season Content */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
           {/* Image */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated group">
             <img
@@ -110,7 +166,76 @@ export const SeasonsSection = () => {
             </div>
           </div>
         </div>
+
+        {/* Gallery Grid */}
+        {currentGallery.length > 0 && (
+          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+            {currentGallery.map((image, index) => (
+              <div 
+                key={index}
+                className="break-inside-avoid cursor-pointer group"
+                onClick={() => openLightbox(index)}
+              >
+                <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
+                  <img
+                    src={image}
+                    alt={`${currentSeason.name} ${index + 1}`}
+                    className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-night-sky/95 flex items-center justify-center"
+          onClick={closeLightbox}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+        >
+          {/* Close button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors z-10"
+          >
+            <X className="w-8 h-8" />
+          </button>
+
+          {/* Previous button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+            className="absolute left-4 p-3 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-10"
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+
+          {/* Image */}
+          <img
+            src={currentGallery[currentImageIndex]}
+            alt={`${currentSeason.name} ${currentImageIndex + 1}`}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {/* Next button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); goToNext(); }}
+            className="absolute right-4 p-3 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-10"
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+
+          {/* Image counter */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 text-sm">
+            {currentImageIndex + 1} / {currentGallery.length}
+          </div>
+        </div>
+      )}
     </section>
   );
 };
