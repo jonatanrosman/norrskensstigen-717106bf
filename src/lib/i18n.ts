@@ -18,7 +18,8 @@ export const translations = {
       explore: 'Utforska',
     },
     cabin: {
-      title: 'Ditt fjällhem',
+      title: 'Upplev stugan',
+      intro: 'Nybyggt timmerhus i vackra Granfjällsbyn i Stöten. Här bor ni högst upp och längst in på en återvändsgata med Ski\u2011in/Ski\u2011out genom transportlift precis bakom husknuten. Huset har sol hela dagen som avslutas med en solnedgång mellan de svenska och norska fjälltopparna.',
       subtitle: 'Bekvämt & ombonat för upp till 12 gäster',
       beds: 'Bäddar',
       bedrooms: 'Sovrum',
@@ -159,7 +160,8 @@ export const translations = {
       explore: 'Explore',
     },
     cabin: {
-      title: 'Your mountain home',
+      title: 'Discover the cabin',
+      intro: 'A newly built log cabin in beautiful Granfjällsbyn in Stöten. Located at the top of a quiet cul-de-sac with Ski\u2011in/Ski\u2011out access via the transport lift right behind the house. The cabin enjoys sunshine all day, ending with sunsets between the Swedish and Norwegian mountain peaks.',
       subtitle: 'Comfortable & cozy for up to 12 guests',
       beds: 'Beds',
       bedrooms: 'Bedrooms',
@@ -300,7 +302,8 @@ export const translations = {
       explore: 'Entdecken',
     },
     cabin: {
-      title: 'Ihr Bergzuhause',
+      title: 'Entdecken Sie die Hütte',
+      intro: 'Ein neu gebautes Blockhaus im wunderschönen Granfjällsbyn in Stöten. Hier wohnen Sie am höchsten Punkt einer ruhigen Sackgasse mit Ski\u2011in/Ski\u2011out-Zugang über den Transportlift direkt hinter dem Haus. Die Hütte genießt den ganzen Tag Sonne, mit Sonnenuntergängen zwischen den schwedischen und norwegischen Berggipfeln.',
       subtitle: 'Komfortabel & gemütlich für bis zu 12 Gäste',
       beds: 'Betten',
       bedrooms: 'Schlafzimmer',

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Import gallery images (current 10, will add 8 more)
+// Import gallery images (18 total)
 import interior1 from '@/assets/interior/interior-1.jpg';
 import interior2 from '@/assets/interior/interior-2.jpg';
 import interior3 from '@/assets/interior/interior-3.jpg';
@@ -18,6 +18,14 @@ import interior7 from '@/assets/interior/interior-7.jpg';
 import interior8 from '@/assets/interior/interior-8.jpg';
 import interior9 from '@/assets/interior/interior-9.jpg';
 import interior10 from '@/assets/interior/interior-10.jpg';
+import interior11 from '@/assets/interior/interior-11.jpg';
+import interior12 from '@/assets/interior/interior-12.jpg';
+import interior13 from '@/assets/interior/interior-13.jpg';
+import interior14 from '@/assets/interior/interior-14.jpg';
+import interior15 from '@/assets/interior/interior-15.jpg';
+import interior16 from '@/assets/interior/interior-16.jpg';
+import interior17 from '@/assets/interior/interior-17.jpg';
+import interior18 from '@/assets/interior/interior-18.jpg';
 
 const galleryImages = [
   { src: interior1, alt: 'Vardagsrum med högt i tak' },
@@ -30,6 +38,14 @@ const galleryImages = [
   { src: interior8, alt: 'Övre våning med utsikt' },
   { src: interior9, alt: 'Allrum med balkong' },
   { src: interior10, alt: 'Sovrum' },
+  { src: interior11, alt: 'Sovrum med våningssängar' },
+  { src: interior12, alt: 'Badrum' },
+  { src: interior13, alt: 'Hall och entré' },
+  { src: interior14, alt: 'Tvättstuga med bastu' },
+  { src: interior15, alt: 'Dusch' },
+  { src: interior16, alt: 'Planritning' },
+  { src: interior17, alt: 'Entréplan 3D' },
+  { src: interior18, alt: 'Ovanvåning 3D' },
 ];
 
 export const CabinSection = () => {
@@ -96,12 +112,12 @@ export const CabinSection = () => {
     <section id="cabin" className="py-24 md:py-32 bg-gradient-frost">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
             {t.cabin.title}
           </h2>
-          <p className="text-lg text-muted-foreground">
-            {t.cabin.subtitle}
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+            {t.cabin.intro}
           </p>
         </div>
 
