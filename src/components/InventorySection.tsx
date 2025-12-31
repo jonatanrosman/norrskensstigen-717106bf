@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   ChefHat, 
@@ -6,9 +7,8 @@ import {
   TreePine, 
   ShieldCheck,
   Tv,
-  Wifi,
-  Flame,
-  Waves
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 type InventoryCategory = {
@@ -98,8 +98,23 @@ const inventoryData: InventoryCategory[] = [
   },
 ];
 
+const VISIBLE_ITEMS_COUNT = 4;
+
 export const InventorySection = () => {
   const { language } = useLanguage();
+  const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
+
+  const toggleCategory = (idx: number) => {
+    setExpandedCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(idx)) {
+        newSet.delete(idx);
+      } else {
+        newSet.add(idx);
+      }
+      return newSet;
+    });
+  };
 
   const title = language === 'sv' 
     ? 'Finns på Norrskensstigen 12A' 
@@ -112,6 +127,9 @@ export const InventorySection = () => {
     : language === 'de'
       ? 'Eine Auswahl der am häufigsten nachgefragten Artikel. Bei spezifischen Fragen kontaktieren Sie info@norrskensstigen.se'
       : 'A selection of frequently requested items. For specific questions, email info@norrskensstigen.se';
+
+  const showMoreLabel = language === 'sv' ? 'Visa mer' : language === 'de' ? 'Mehr anzeigen' : 'Show more';
+  const showLessLabel = language === 'sv' ? 'Visa mindre' : language === 'de' ? 'Weniger anzeigen' : 'Show less';
 
   return (
     <section className="py-24 md:py-32 bg-secondary">
@@ -128,6 +146,10 @@ export const InventorySection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {inventoryData.map((category, idx) => {
             const Icon = category.icon;
+            const isExpanded = expandedCategories.has(idx);
+            const hasMoreItems = category.items.length > VISIBLE_ITEMS_COUNT;
+            const visibleItems = isExpanded ? category.items : category.items.slice(0, VISIBLE_ITEMS_COUNT);
+            
             return (
               <div
                 key={idx}
@@ -142,16 +164,34 @@ export const InventorySection = () => {
                   </h3>
                 </div>
                 <ul className="space-y-2">
-                  {category.items.map((item, itemIdx) => (
+                  {visibleItems.map((item, itemIdx) => (
                     <li
                       key={itemIdx}
-                      className="text-sm text-muted-foreground flex items-start gap-2"
+                      className="text-sm text-muted-foreground flex items-center gap-2"
                     >
-                      <span className="text-primary mt-1.5">•</span>
+                      <span className="text-primary">•</span>
                       <span>{item[language]}</span>
                     </li>
                   ))}
                 </ul>
+                {hasMoreItems && (
+                  <button
+                    onClick={() => toggleCategory(idx)}
+                    className="mt-3 text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+                  >
+                    {isExpanded ? (
+                      <>
+                        {showLessLabel}
+                        <ChevronUp className="w-4 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        {showMoreLabel} ({category.items.length - VISIBLE_ITEMS_COUNT})
+                        <ChevronDown className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             );
           })}

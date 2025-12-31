@@ -10,6 +10,7 @@ import { Send, CalendarIcon, Info } from 'lucide-react';
 import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay, parse } from 'date-fns';
 import { sv, enGB, de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 // Winter season dates
 const WINTER_SEASONS = [
@@ -125,11 +126,32 @@ export const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    toast({ title: t.contact.success });
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    setCheckInDate(undefined);
-    setIsSubmitting(false);
+    
+    try {
+      const { error } = await supabase.functions.invoke('send-booking-inquiry', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          checkInDate: checkInDate ? format(checkInDate, 'PPP', { locale: dateLocale }) : undefined,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({ title: t.contact.success });
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setCheckInDate(undefined);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({ 
+        title: language === 'sv' ? 'Något gick fel' : language === 'de' ? 'Etwas ist schief gelaufen' : 'Something went wrong',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const checkInLabel = language === 'sv' ? 'Önskat ankomstdatum' : language === 'de' ? 'Gewünschtes Anreisedatum' : 'Preferred check-in date';
