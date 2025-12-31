@@ -9,13 +9,33 @@ export const LocationSection = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const distances = [
-    { icon: Plane, label: t.location.airport, distance: t.location.airportDistance },
-    { icon: Mountain, label: t.location.trysil, distance: t.location.trysilDistance },
+    { 
+      icon: Plane, 
+      label: t.location.airport, 
+      time: language === 'sv' ? '20 min' : language === 'de' ? '20 Min.' : '20 min',
+      distance: '22 km'
+    },
+    { 
+      icon: Mountain, 
+      label: t.location.trysil, 
+      time: language === 'sv' ? '45 min' : language === 'de' ? '45 Min.' : '45 min',
+      distance: '55 km'
+    },
   ];
 
   const travelTimes = [
-    { icon: Car, label: language === 'sv' ? 'Från Stockholm' : language === 'de' ? 'Von Stockholm' : 'From Stockholm', distance: language === 'sv' ? 'ca 5 tim' : language === 'de' ? 'ca. 5 Std.' : 'approx. 5 hrs' },
-    { icon: Car, label: language === 'sv' ? 'Från Göteborg' : language === 'de' ? 'Von Göteborg' : 'From Gothenburg', distance: language === 'sv' ? 'ca 5,5 tim' : language === 'de' ? 'ca. 5,5 Std.' : 'approx. 5.5 hrs' },
+    { 
+      icon: Car, 
+      label: language === 'sv' ? 'Från Stockholm' : language === 'de' ? 'Von Stockholm' : 'From Stockholm', 
+      time: language === 'sv' ? 'ca 5,5 tim' : language === 'de' ? 'ca. 5,5 Std.' : 'approx. 5.5 hrs',
+      distance: '450 km'
+    },
+    { 
+      icon: Car, 
+      label: language === 'sv' ? 'Från Göteborg' : language === 'de' ? 'Von Göteborg' : 'From Gothenburg', 
+      time: language === 'sv' ? 'ca 6,5 tim' : language === 'de' ? 'ca. 6,5 Std.' : 'approx. 6.5 hrs',
+      distance: '500 km'
+    },
   ];
 
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Norrskensstigen 12A, 780 67 Sälen, Sweden')}`;
@@ -24,10 +44,10 @@ export const LocationSection = () => {
     <section className="py-24 md:py-32 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Map - zoomed out 8 steps (lower zoom level) */}
+          {/* Map - using the proper embed code */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated h-[400px] lg:h-[500px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d200000!2d13.0!3d61.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x466de5cd051b25a5%3A0x4ef6c4de0c28c35e!2sNorrskensstigen%2012A%2C%20780%2067%20S%C3%A4len!5e0!3m2!1sen!2sse!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d976.0688078656251!2d12.90997622836504!3d61.275495018414475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4669afea634cc5e3%3A0xfe7a4fbda77182d5!2sNorrskensstigen%2012a!5e1!3m2!1ssv!2sse!4v1767128954667!5m2!1ssv!2sse"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -37,16 +57,6 @@ export const LocationSection = () => {
               title="Location map"
               className="transition-all duration-700"
             />
-
-            {/* Visual pin overlay (Google embed can't be styled internally) */}
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full">
-                <div className="relative">
-                  <div className="absolute inset-0 blur-md bg-primary/30 rounded-full" />
-                  <MapPin className="relative w-10 h-10 text-primary drop-shadow" />
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Content */}
@@ -78,8 +88,13 @@ export const LocationSection = () => {
                   <div className="flex-1">
                     <p className="font-medium text-foreground">{item.label}</p>
                   </div>
-                  <div className="text-lg font-serif text-primary font-semibold">
-                    {item.distance}
+                  <div className="text-right">
+                    <div className="text-lg font-serif text-primary font-semibold">
+                      {item.time}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {item.distance}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -94,8 +109,13 @@ export const LocationSection = () => {
                   <div className="flex-1">
                     <p className="font-medium text-foreground">{item.label}</p>
                   </div>
-                  <div className="text-lg font-serif text-primary font-semibold">
-                    {item.distance}
+                  <div className="text-right">
+                    <div className="text-lg font-serif text-primary font-semibold">
+                      {item.time}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {item.distance}
+                    </div>
                   </div>
                 </div>
               ))}
