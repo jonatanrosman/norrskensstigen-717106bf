@@ -14,15 +14,25 @@ import heroWinter from '@/assets/hero-winter.jpg';
 const Index = () => {
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen">
         <Header />
         <main>
           <HeroSection heroImage={heroWinter} />
-          <CabinSection />
-          <SeasonsSection />
-          <InventorySection />
-          <LocationSection />
-          <ContactForm />
+          <div className="bg-background">
+            <CabinSection />
+          </div>
+          <div className="bg-secondary">
+            <SeasonsSection />
+          </div>
+          <div className="bg-background">
+            <InventorySection />
+          </div>
+          <div className="bg-secondary">
+            <LocationSection />
+          </div>
+          <div className="bg-background">
+            <ContactForm />
+          </div>
         </main>
         <Footer />
       </div>
