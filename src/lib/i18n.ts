@@ -49,7 +49,7 @@ export const translations = {
         highlights: ['Årets Skidanläggning 2019', 'Sveriges bästa pist 24/25', 'Ski\u2011in/Ski\u2011out', '15 min till flyget'],
       },
       summer: {
-        name: 'Vår, Sommar & Höst',
+        name: 'Vår, sommar & höst',
         title: 'Ett naturnära paradis',
         description: 'Under vår, sommar och höst förvandlas Stöten till ett lugnt, naturnära paradis. Vandra på Södra Kungsleden till Stötenfjällets topp, cykla på flowy stigar i Rörbäcksnäs (20 min bort), eller fiska i kristallklara tjärnar. Plocka hjortron, blåbär och kantareller i fjällsidorna.',
         highlights: ['Södra Kungsleden', 'Mountainbike i Rörbäcksnäs', 'Fiske', 'Bär & svamp'],

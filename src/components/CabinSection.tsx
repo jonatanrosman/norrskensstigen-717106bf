@@ -5,7 +5,6 @@ import {
   WashingMachine, Droplets, Wind, Bed, Bath, Home, SquareStack,
   X, ChevronLeft, ChevronRight
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 // Import gallery images (18 total)
 import interior1 from '@/assets/interior/interior-1.jpg';
@@ -97,17 +96,6 @@ export const CabinSection = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedImage]);
 
-  // Pinterest-style column distribution
-  const getColumnImages = () => {
-    const columns: typeof galleryImages[] = [[], [], []];
-    galleryImages.forEach((img, i) => {
-      columns[i % 3].push({ ...img, originalIndex: i } as typeof galleryImages[0] & { originalIndex: number });
-    });
-    return columns;
-  };
-
-  const columns = getColumnImages();
-
   return (
     <section id="cabin" className="py-24 md:py-32 bg-gradient-frost">
       <div className="container mx-auto px-4">
@@ -121,34 +109,26 @@ export const CabinSection = () => {
           </p>
         </div>
 
-        {/* Pinterest-style Masonry Gallery */}
+        {/* Simple Grid Gallery - 2 columns on mobile, 3 on tablet+ */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-16">
-          {columns.map((column, colIndex) => (
-            <div key={colIndex} className="flex flex-col gap-3 md:gap-4">
-              {column.map((img: typeof galleryImages[0] & { originalIndex?: number }, imgIndex) => {
-                const originalIndex = (img as { originalIndex?: number }).originalIndex ?? colIndex + imgIndex * 3;
-                // Vary heights for masonry effect
-                const heightClass = imgIndex % 2 === 0 ? 'aspect-[3/4]' : 'aspect-[4/3]';
-                if (colIndex === 1 && imgIndex === 0) {
-                  // Make first image in middle column taller
-                }
-                return (
-                  <div 
-                    key={originalIndex}
-                    onClick={() => setSelectedImage(originalIndex)}
-                    className="relative overflow-hidden rounded-xl shadow-soft group cursor-pointer"
-                  >
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      className={`w-full object-cover group-hover:scale-105 transition-transform duration-700 ${heightClass}`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-night-sky/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                );
-              })}
-            </div>
-          ))}
+          {galleryImages.map((img, index) => {
+            // Vary heights for masonry effect - only on desktop
+            const isLarge = index % 3 === 0;
+            return (
+              <div 
+                key={index}
+                onClick={() => setSelectedImage(index)}
+                className="relative overflow-hidden rounded-xl shadow-soft group cursor-pointer"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className={`w-full object-cover group-hover:scale-105 transition-transform duration-700 aspect-square md:${isLarge ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-night-sky/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+            );
+          })}
         </div>
 
         {/* Stats */}
