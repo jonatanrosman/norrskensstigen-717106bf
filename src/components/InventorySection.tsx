@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   ChefHat, 
@@ -8,7 +8,9 @@ import {
   ShieldCheck,
   Tv,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 type InventoryCategory = {
@@ -98,11 +100,12 @@ const inventoryData: InventoryCategory[] = [
   },
 ];
 
-const VISIBLE_ITEMS_COUNT = 4;
+const VISIBLE_ITEMS_COUNT = 3;
 
 export const InventorySection = () => {
   const { language } = useLanguage();
   const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const toggleCategory = (idx: number) => {
     setExpandedCategories(prev => {
@@ -114,6 +117,16 @@ export const InventorySection = () => {
       }
       return newSet;
     });
+  };
+
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const scrollAmount = 340;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const title = language === 'sv' 
@@ -132,7 +145,7 @@ export const InventorySection = () => {
   const showLessLabel = language === 'sv' ? 'Visa mindre' : language === 'de' ? 'Weniger anzeigen' : 'Show less';
 
   return (
-    <section className="py-24 md:py-32 bg-secondary">
+    <section className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
@@ -143,58 +156,82 @@ export const InventorySection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {inventoryData.map((category, idx) => {
-            const Icon = category.icon;
-            const isExpanded = expandedCategories.has(idx);
-            const hasMoreItems = category.items.length > VISIBLE_ITEMS_COUNT;
-            const visibleItems = isExpanded ? category.items : category.items.slice(0, VISIBLE_ITEMS_COUNT);
-            
-            return (
-              <div
-                key={idx}
-                className="bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-shadow"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-primary" />
+        {/* Carousel container */}
+        <div className="relative">
+          {/* Navigation buttons */}
+          <button
+            onClick={() => scrollCarousel('left')}
+            className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center text-foreground hover:bg-muted transition-colors hidden md:flex"
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => scrollCarousel('right')}
+            className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-card shadow-elevated flex items-center justify-center text-foreground hover:bg-muted transition-colors hidden md:flex"
+            aria-label="Scroll right"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Carousel */}
+          <div 
+            ref={carouselRef}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-4 px-4 md:mx-0 md:px-0"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {inventoryData.map((category, idx) => {
+              const Icon = category.icon;
+              const isExpanded = expandedCategories.has(idx);
+              const hasMoreItems = category.items.length > VISIBLE_ITEMS_COUNT;
+              const visibleItems = isExpanded ? category.items : category.items.slice(0, VISIBLE_ITEMS_COUNT);
+              
+              return (
+                <div
+                  key={idx}
+                  className="flex-shrink-0 w-[300px] md:w-[320px] snap-start bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-shadow"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-serif text-xl text-foreground">
+                      {category.title[language]}
+                    </h3>
                   </div>
-                  <h3 className="font-serif text-xl text-foreground">
-                    {category.title[language]}
-                  </h3>
-                </div>
-                <ul className="space-y-2">
-                  {visibleItems.map((item, itemIdx) => (
-                    <li
-                      key={itemIdx}
-                      className="text-sm text-muted-foreground flex items-center gap-2"
+                  <ul className="space-y-2">
+                    {visibleItems.map((item, itemIdx) => (
+                      <li
+                        key={itemIdx}
+                        className="text-sm text-muted-foreground flex items-center gap-2"
+                      >
+                        <span className="text-primary">•</span>
+                        <span>{item[language]}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {hasMoreItems && (
+                    <button
+                      onClick={() => toggleCategory(idx)}
+                      className="mt-3 text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
                     >
-                      <span className="text-primary">•</span>
-                      <span>{item[language]}</span>
-                    </li>
-                  ))}
-                </ul>
-                {hasMoreItems && (
-                  <button
-                    onClick={() => toggleCategory(idx)}
-                    className="mt-3 text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
-                  >
-                    {isExpanded ? (
-                      <>
-                        {showLessLabel}
-                        <ChevronUp className="w-4 h-4" />
-                      </>
-                    ) : (
-                      <>
-                        {showMoreLabel} ({category.items.length - VISIBLE_ITEMS_COUNT})
-                        <ChevronDown className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-                )}
-              </div>
-            );
-          })}
+                      {isExpanded ? (
+                        <>
+                          {showLessLabel}
+                          <ChevronUp className="w-4 h-4" />
+                        </>
+                      ) : (
+                        <>
+                          {showMoreLabel} ({category.items.length - VISIBLE_ITEMS_COUNT})
+                          <ChevronDown className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
