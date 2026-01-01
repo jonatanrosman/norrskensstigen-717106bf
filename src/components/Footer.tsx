@@ -5,12 +5,21 @@ import { Instagram, Facebook, Mail, Phone } from 'lucide-react';
 import logo from '@/assets/logo.png';
 
 export const Footer = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const socialLinks = [
     { icon: Instagram, href: 'https://instagram.com/norrskensstigen.se', label: 'Instagram' },
     { icon: Facebook, href: 'https://www.facebook.com/norrskensstigen.se', label: 'Facebook' },
   ];
+
+  const termsLabel = language === 'sv' ? 'Bokningsvillkor' : language === 'de' ? 'Buchungsbedingungen' : 'Booking Terms';
+
+  const handleTermsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Let the router handle navigation, then scroll to top
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
 
   return (
     <footer className="bg-night-sky text-primary-foreground py-16 md:py-20">
@@ -37,11 +46,11 @@ export const Footer = () => {
                 <span>info@norrskensstigen.se</span>
               </a>
               <a 
-                href="tel:+46701234567" 
+                href="tel:+46705855855" 
                 className="flex items-center gap-3 text-primary-foreground/70 hover:text-primary-foreground transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                <span>+46 70 123 45 67</span>
+                <span>+46 705 85 58 55</span>
               </a>
             </div>
           </div>
@@ -69,11 +78,15 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-primary-foreground/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-primary-foreground/50">
-            © {new Date().getFullYear()} Norrskensstigen. All rights reserved.
+            © {new Date().getFullYear()} Norrskensstigen
           </p>
           <div className="flex gap-6">
-            <Link to="/villkor" className="text-sm text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors">
-              {t.footer.terms}
+            <Link 
+              to="/villkor" 
+              onClick={handleTermsClick}
+              className="text-sm text-primary-foreground/50 hover:text-primary-foreground/80 transition-colors"
+            >
+              {termsLabel}
             </Link>
           </div>
         </div>

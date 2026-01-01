@@ -44,7 +44,7 @@ export const LocationSection = () => {
     <section className="py-24 md:py-32 bg-secondary">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Map - using the proper embed code */}
+          {/* Map */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated h-[400px] lg:h-[500px]">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d976.0688078656251!2d12.90997622836504!3d61.275495018414475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4669afea634cc5e3%3A0xfe7a4fbda77182d5!2sNorrskensstigen%2012a!5e1!3m2!1ssv!2sse!4v1767128954667!5m2!1ssv!2sse"
@@ -72,7 +72,7 @@ export const LocationSection = () => {
                 className="flex items-start gap-3 text-lg text-muted-foreground hover:text-primary transition-colors group"
               >
                 <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1 group-hover:scale-110 transition-transform" />
-                <span className="underline-offset-4 group-hover:underline">{t.location.address}</span>
+                <span className="underline underline-offset-4">{t.location.address}</span>
               </a>
             </div>
 

@@ -10,7 +10,6 @@ import { Send, CalendarIcon, Info } from 'lucide-react';
 import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay, parse } from 'date-fns';
 import { sv, enGB, de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/integrations/supabase/client';
 
 // Winter season dates
 const WINTER_SEASONS = [
@@ -32,7 +31,7 @@ const winterPricing = [
   { week: 1, dates: '27/12 2025 - 3/1 2026', price: '28 395 kr', status: 'Bokad' },
   { week: 2, dates: '3/1 - 10/1 2026', price: '13 595 kr', status: 'Bokad' },
   { week: 3, dates: '10/1 - 17/1 2026', price: '13 595 kr', status: 'Bokad' },
-  { week: 4, dates: '17/1 - 24/1 2026', price: '12 000 kr', status: 'Ledig' },
+  { week: 4, dates: '17/1 - 24/1 2026', price: '12 000 kr', originalPrice: '15 000 kr', status: 'Ledig' },
   { week: 5, dates: '24/1 - 31/1 2026', price: '16 395 kr', status: 'Bokad' },
   { week: 6, dates: '31/1 - 7/2 2026', price: '17 000 kr', status: 'Bokad' },
   { week: 7, dates: '7/2 - 14/2 2026', price: '27 495 kr', status: 'Bokad' },
@@ -88,10 +87,6 @@ export const ContactForm = () => {
 
   const bookedWinterCheckInDays = useMemo(() => {
     const parseStartDate = (range: string) => {
-      // Examples:
-      // - "13/12 - 20/12 2025"
-      // - "27/12 2025 - 3/1 2026"
-      // - "3/1 - 10/1 2026"
       const [startPartRaw] = range.split('-');
       const startPart = (startPartRaw || '').trim();
 
@@ -100,7 +95,6 @@ export const ContactForm = () => {
       const year = yearFromStart ? Number(yearFromStart) : years[0];
 
       const dm = startPart.replace(/\b\d{4}\b/, '').trim();
-      // date-fns parse expects leading zeros, but is tolerant with "d/M"
       return parse(`${dm} ${year}`, 'd/M yyyy', new Date());
     };
 
@@ -128,25 +122,48 @@ export const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase.functions.invoke('send-booking-inquiry', {
-        body: {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           message: formData.message,
           checkInDate: checkInDate ? format(checkInDate, 'PPP', { locale: dateLocale }) : undefined,
-        },
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Failed to send email');
+      }
 
-      toast({ title: t.contact.success });
+      toast({ 
+        title: language === 'sv' 
+          ? 'Meddelandet skickat!' 
+          : language === 'de'
+          ? 'Nachricht gesendet!'
+          : 'Message sent!',
+        description: language === 'sv'
+          ? 'Vi återkommer till dig inom 24 timmar.'
+          : language === 'de'
+          ? 'Wir werden uns innerhalb von 24 Stunden bei Ihnen melden.'
+          : 'We will get back to you within 24 hours.'
+      });
+      
       setFormData({ name: '', email: '', phone: '', message: '' });
       setCheckInDate(undefined);
     } catch (error) {
       console.error('Error sending email:', error);
       toast({ 
         title: language === 'sv' ? 'Något gick fel' : language === 'de' ? 'Etwas ist schief gelaufen' : 'Something went wrong',
+        description: language === 'sv' 
+          ? 'Vänligen försök igen eller kontakta oss direkt på info@norrskensstigen.se'
+          : language === 'de'
+          ? 'Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt unter info@norrskensstigen.se'
+          : 'Please try again or contact us directly at info@norrskensstigen.se',
         variant: 'destructive'
       });
     } finally {
@@ -201,11 +218,22 @@ export const ContactForm = () => {
                         {winterPricing.map((row) => (
                           <tr key={row.week} className="border-b border-border/50">
                             <td className="py-2 text-foreground">{row.week}</td>
-                            <td className="py-2 text-foreground text-xs">
-                              {row.dates}
-                              {row.note && <span className="text-muted-foreground ml-1">({row.note})</span>}
+                            <td className="py-2 text-foreground">
+                              <div className="text-sm leading-tight">
+                                {row.dates}
+                                {row.note && <div className="text-xs text-muted-foreground">{row.note}</div>}
+                              </div>
                             </td>
-                            <td className="py-2 text-right font-medium text-foreground">{row.price}</td>
+                            <td className="py-2 text-right">
+                              {row.originalPrice ? (
+                                <div className="flex flex-col items-end">
+                                  <span className="text-xs text-muted-foreground line-through">{row.originalPrice}</span>
+                                  <span className="font-semibold text-green-600 dark:text-green-500">{row.price}</span>
+                                </div>
+                              ) : (
+                                <span className="font-medium text-foreground">{row.price}</span>
+                              )}
+                            </td>
                             <td className="py-2 text-right">
                               <span
                                 className={cn(
@@ -259,7 +287,7 @@ export const ContactForm = () => {
                 <label htmlFor="phone" className="text-sm font-medium text-foreground">
                   {t.contact.phone} *
                 </label>
-                <Input id="phone" name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="h-12" />
+                <Input id="phone" name="phone" type="tel" required value={formData.phone} onChange={handleChange} className="h-12" placeholder="+46 705 85 58 55" />
               </div>
 
               {/* Check-in Date */}
@@ -291,7 +319,7 @@ export const ContactForm = () => {
               </div>
 
               <Button type="submit" variant="hero" size="xl" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? '...' : t.contact.send}
+                {isSubmitting ? (language === 'sv' ? 'Skickar...' : language === 'de' ? 'Wird gesendet...' : 'Sending...') : t.contact.send}
                 <Send className="ml-2 w-5 h-5" />
               </Button>
             </form>

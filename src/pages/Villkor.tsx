@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
 const VillkorContent = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const sections = [
     { key: 'booking', data: t.terms.booking },
@@ -18,6 +18,9 @@ const VillkorContent = () => {
     { key: 'rules', data: t.terms.rules },
   ];
 
+  const backLabel = language === 'sv' ? 'Tillbaka' : language === 'de' ? 'Zurück' : 'Back';
+  const pageTitle = language === 'sv' ? 'Bokningsvillkor' : language === 'de' ? 'Buchungsbedingungen' : 'Booking Terms';
+
   return (
     <main className="pt-24 pb-16 bg-background min-h-screen">
       <div className="container mx-auto px-4">
@@ -28,12 +31,12 @@ const VillkorContent = () => {
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Tillbaka</span>
+            <span>{backLabel}</span>
           </Link>
 
           {/* Title */}
           <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-12">
-            {t.terms.title}
+            {pageTitle}
           </h1>
 
           {/* Sections */}
@@ -64,7 +67,7 @@ const Villkor = () => {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-background">
-        <Header />
+        <Header isDarkBackground={false} />
         <VillkorContent />
         <Footer />
       </div>

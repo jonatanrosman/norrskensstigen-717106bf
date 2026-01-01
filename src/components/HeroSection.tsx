@@ -88,7 +88,7 @@ export const HeroSection = ({ heroImage }: HeroSectionProps) => {
           </p>
           
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-primary-foreground mb-6 animate-fade-up opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-            {t.hero.title}
+            Norrskensstigen 12A
           </h1>
           
           <p className="text-xl sm:text-2xl md:text-3xl text-primary-foreground/90 font-light mb-4 animate-fade-up opacity-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>

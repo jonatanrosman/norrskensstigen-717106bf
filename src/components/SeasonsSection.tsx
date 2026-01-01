@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { Snowflake, Sun, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -41,34 +41,39 @@ const winterGalleryImages = [
   winter7, winter8, winter9, winter10
 ];
 
-// Summer gallery with size hints for layout (02-04 larger, 05-10 smaller)
-const summerGalleryImagesWithSize: { src: string; large: boolean }[] = [
-  { src: summer2, large: true },
-  { src: summer3, large: true },
-  { src: summer4, large: true },
-  { src: summer5, large: false },
-  { src: summer6, large: false },
-  { src: summer7, large: false },
-  { src: summer8, large: false },
-  { src: summer9, large: false },
-  { src: summer10, large: false },
+const summerGalleryImages = [
+  summer2, summer3, summer4, summer5, summer6,
+  summer7, summer8, summer9, summer10
 ];
 
 export const SeasonsSection = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [activeSeason, setActiveSeason] = useState<Season>('winter');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // For winter, use simple string array
-  // For summer, extract just the src for lightbox compatibility
+  // Preload all images
+  useEffect(() => {
+    const allImages = [
+      ...winterGalleryImages,
+      ...summerGalleryImages,
+      seasonHeroImages.winter,
+      seasonHeroImages.summer
+    ];
+    
+    allImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const currentGalleryForLightbox = activeSeason === 'winter' 
     ? winterGalleryImages 
-    : summerGalleryImagesWithSize.map(img => img.src);
+    : summerGalleryImages;
 
-  const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; color: string }[] = [
-    { id: 'winter', icon: Snowflake, color: 'from-blue-400 to-cyan-300' },
-    { id: 'summer', icon: Sun, color: 'from-green-400 to-emerald-500' },
+  const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; label: string }[] = [
+    { id: 'winter', icon: Snowflake, label: language === 'sv' ? 'Vinter' : language === 'de' ? 'Winter' : 'Winter' },
+    { id: 'summer', icon: Sun, label: language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn' },
   ];
 
   const currentSeason = t.seasons[activeSeason];
@@ -117,32 +122,34 @@ export const SeasonsSection = () => {
           </h2>
         </div>
 
-        {/* Season Tabs */}
-        <div className="flex justify-center gap-4 mb-12">
-          {seasons.map((season) => {
-            const Icon = season.icon;
-            const isActive = activeSeason === season.id;
-            return (
-              <button
-                key={season.id}
-                onClick={() => setActiveSeason(season.id)}
-                className={cn(
-                  "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
-                  isActive
-                    ? "bg-primary text-primary-foreground shadow-elevated scale-105"
-                    : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
-                )}
-              >
-                <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
-                <span>{t.seasons[season.id].name}</span>
-              </button>
-            );
-          })}
+        {/* Season Tabs - Sticky on scroll */}
+        <div className="sticky top-20 z-20 bg-background/95 backdrop-blur-sm py-4 -mx-4 px-4 mb-12">
+          <div className="flex justify-center gap-4">
+            {seasons.map((season) => {
+              const Icon = season.icon;
+              const isActive = activeSeason === season.id;
+              return (
+                <button
+                  key={season.id}
+                  onClick={() => setActiveSeason(season.id)}
+                  className={cn(
+                    "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-elevated scale-105"
+                      : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
+                  )}
+                >
+                  <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
+                  <span>{season.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Season Content */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16">
-          {/* Image - consistent layout for both seasons */}
+          {/* Image */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated group h-[300px] md:h-[400px]">
             <img
               src={seasonHeroImages[activeSeason]}
@@ -178,8 +185,8 @@ export const SeasonsSection = () => {
           </div>
         </div>
 
-        {/* Gallery Grid - 3x3 for both seasons */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* Gallery Grid - Fixed 2 columns on mobile, 3 on larger screens */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {currentGalleryForLightbox.map((image, index) => (
             <div 
               key={index}
