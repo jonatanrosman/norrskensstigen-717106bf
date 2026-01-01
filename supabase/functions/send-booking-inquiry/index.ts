@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
-const norrskensstigen_contact_form = Deno.env.get("norrskensstigen_contact_form");
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -29,7 +29,7 @@ const handler = async (req: Request): Promise<Response> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${norrskensstigen_contact_form}`,
+        Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
         from: "Norrskensstigen <info@norrskensstigen.se>",
