@@ -6,3 +6,10 @@
     { "source": "/var-sommar-host.html", "destination": "/", "permanent": true }
   ]
 }
+{
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
