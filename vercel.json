@@ -5,9 +5,4 @@
     { "source": "/vinter.html", "destination": "/", "permanent": true },
     { "source": "/var-sommar-host.html", "destination": "/", "permanent": true }
   ],
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "@vercel/node@4"
-    }
-  }
 }
