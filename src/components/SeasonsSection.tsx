@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { Snowflake, Sun, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -54,11 +54,47 @@ const summerGalleryImagesWithSize: { src: string; large: boolean }[] = [
   { src: summer10, large: false },
 ];
 
+// Preload all images for both seasons
+const allImages = [
+  winter1, winter2, winter3, winter4, winter5, winter6, winter7, winter8, winter9, winter10,
+  summer1, summer2, summer3, summer4, summer5, summer6, summer7, summer8, summer9, summer10
+];
+
 export const SeasonsSection = () => {
   const { t } = useLanguage();
   const [activeSeason, setActiveSeason] = useState<Season>('winter');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [isSticky, setIsSticky] = useState(false);
+
+  // Preload images on mount
+  useEffect(() => {
+    allImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  // Handle sticky tabs
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current && tabsRef.current) {
+        const sectionRect = sectionRef.current.getBoundingClientRect();
+        const sectionBottom = sectionRect.bottom;
+        const headerOffset = 80;
+        
+        // Sticky when section is in view and tabs would scroll out
+        const shouldBeSticky = sectionRect.top <= headerOffset && sectionBottom > 200;
+        setIsSticky(shouldBeSticky);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // For winter, use simple string array
   // For summer, extract just the src for lightbox compatibility
@@ -72,6 +108,15 @@ export const SeasonsSection = () => {
   ];
 
   const currentSeason = t.seasons[activeSeason];
+
+  const handleSeasonChange = (newSeason: Season) => {
+    if (newSeason === activeSeason) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveSeason(newSeason);
+      setTimeout(() => setIsTransitioning(false), 50);
+    }, 200);
+  };
 
   const openLightbox = (index: number) => {
     setCurrentImageIndex(index);
@@ -102,7 +147,7 @@ export const SeasonsSection = () => {
   };
 
   return (
-    <section id="seasons" className="py-24 md:py-32 bg-background relative overflow-hidden">
+    <section ref={sectionRef} id="seasons" className="py-24 md:py-32 bg-card relative overflow-hidden">
       {/* Decorative background */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary rounded-full blur-[200px]" />
@@ -117,20 +162,26 @@ export const SeasonsSection = () => {
           </h2>
         </div>
 
-        {/* Season Tabs */}
-        <div className="flex justify-center gap-4 mb-12">
+        {/* Season Tabs - Sticky */}
+        <div 
+          ref={tabsRef}
+          className={cn(
+            "flex justify-center gap-4 mb-12 transition-all duration-300 z-30",
+            isSticky && "fixed top-20 left-0 right-0 py-4 bg-card/95 backdrop-blur-md shadow-soft"
+          )}
+        >
           {seasons.map((season) => {
             const Icon = season.icon;
             const isActive = activeSeason === season.id;
             return (
               <button
                 key={season.id}
-                onClick={() => setActiveSeason(season.id)}
+                onClick={() => handleSeasonChange(season.id)}
                 className={cn(
                   "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
                   isActive
                     ? "bg-primary text-primary-foreground shadow-elevated scale-105"
-                    : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
+                    : "bg-background text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
                 )}
               >
                 <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
@@ -140,8 +191,14 @@ export const SeasonsSection = () => {
           })}
         </div>
 
+        {/* Spacer when tabs are sticky */}
+        {isSticky && <div className="h-16" />}
+
         {/* Season Content */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16">
+        <div className={cn(
+          "grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16 transition-all duration-300",
+          isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+        )}>
           {/* Image - consistent layout for both seasons */}
           <div className="relative rounded-3xl overflow-hidden shadow-elevated group h-[300px] md:h-[400px]">
             <img
@@ -166,7 +223,7 @@ export const SeasonsSection = () => {
               {currentSeason.highlights.map((highlight, index) => (
                 <div 
                   key={index}
-                  className="flex items-center gap-3 p-4 bg-card rounded-xl shadow-soft hover:shadow-elevated transition-all duration-300"
+                  className="flex items-center gap-3 p-4 bg-background rounded-xl shadow-soft hover:shadow-elevated transition-all duration-300"
                 >
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <Check className="w-4 h-4 text-primary" />
@@ -179,10 +236,13 @@ export const SeasonsSection = () => {
         </div>
 
         {/* Gallery Grid - 3x3 for both seasons */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className={cn(
+          "grid grid-cols-3 gap-4 transition-all duration-300",
+          isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"
+        )}>
           {currentGalleryForLightbox.map((image, index) => (
             <div 
-              key={index}
+              key={`${activeSeason}-${index}`}
               className="cursor-pointer group"
               onClick={() => openLightbox(index)}
             >

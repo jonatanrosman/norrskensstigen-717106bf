@@ -72,7 +72,7 @@ export const LocationSection = () => {
                 className="flex items-start gap-3 text-lg text-muted-foreground hover:text-primary transition-colors group"
               >
                 <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1 group-hover:scale-110 transition-transform" />
-                <span className="underline-offset-4 group-hover:underline">{t.location.address}</span>
+                <span className="underline underline-offset-4 decoration-primary/50 group-hover:decoration-primary transition-colors">{t.location.address}</span>
               </a>
             </div>
 

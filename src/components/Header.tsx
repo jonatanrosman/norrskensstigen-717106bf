@@ -4,11 +4,16 @@ import { LanguageSelector } from './LanguageSelector';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
+import { useLocation } from 'react-router-dom';
 
 export const Header = () => {
   const { t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  
+  // Check if we're on a page with a light background (like Villkor)
+  const isLightBgPage = location.pathname === '/villkor';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,6 +47,9 @@ export const Header = () => {
     { href: '#contact', label: t.nav.contact },
   ];
 
+  // Determine text colors based on page and scroll state
+  const shouldUseDarkText = isLightBgPage && !isScrolled;
+
   return (
     <header
       className={cn(
@@ -71,7 +79,9 @@ export const Header = () => {
                 "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                 isScrolled
                   ? "text-foreground/80 hover:text-foreground"
-                  : "text-primary-foreground/80 hover:text-primary-foreground"
+                  : shouldUseDarkText
+                    ? "text-foreground/80 hover:text-foreground"
+                    : "text-primary-foreground/80 hover:text-primary-foreground"
               )}
             >
               {link.label}
@@ -81,7 +91,11 @@ export const Header = () => {
 
         <div className="flex items-center gap-4">
           <LanguageSelector variant="minimal" className={cn(
-            isScrolled ? "" : "[&_button]:text-primary-foreground/80 [&_button:hover]:text-primary-foreground [&_button:hover]:bg-primary-foreground/10"
+            isScrolled 
+              ? "" 
+              : shouldUseDarkText 
+                ? "[&_button]:text-foreground/80 [&_button:hover]:text-foreground [&_button:hover]:bg-muted"
+                : "[&_button]:text-primary-foreground/80 [&_button:hover]:text-primary-foreground [&_button:hover]:bg-primary-foreground/10"
           )} />
           
           {/* Mobile Menu Button */}
@@ -91,7 +105,9 @@ export const Header = () => {
               "md:hidden p-2 rounded-lg transition-colors",
               isScrolled 
                 ? "text-foreground hover:bg-muted" 
-                : "text-primary-foreground hover:bg-primary-foreground/10"
+                : shouldUseDarkText
+                  ? "text-foreground hover:bg-muted"
+                  : "text-primary-foreground hover:bg-primary-foreground/10"
             )}
             aria-label="Toggle menu"
           >
@@ -102,7 +118,7 @@ export const Header = () => {
 
       {/* Mobile Menu */}
       <div className={cn(
-        "md:hidden absolute top-full left-0 right-0 bg-card/98 backdrop-blur-lg shadow-elevated transition-all duration-300 overflow-hidden",
+        "md:hidden absolute top-full left-0 right-0 bg-card backdrop-blur-lg shadow-elevated transition-all duration-300 overflow-hidden",
         isMobileMenuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
       )}>
         <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
@@ -111,7 +127,7 @@ export const Header = () => {
               key={link.href}
               href={link.href}
               onClick={(e) => smoothScrollTo(e, link.href)}
-              className="text-foreground/80 hover:text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
+              className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
             >
               {link.label}
             </a>
