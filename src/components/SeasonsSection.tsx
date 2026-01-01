@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import { useState, useEffect } from 'react';
-=======
 import { useState, useEffect, useRef } from 'react';
->>>>>>> c84a5d46924e28a1491fe339e26d11eb80333d41
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { Snowflake, Sun, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -171,7 +168,6 @@ export const SeasonsSection = () => {
           </h2>
         </div>
 
-<<<<<<< HEAD
         {/* Season Tabs - Sticky on scroll */}
         <div className="sticky top-20 z-20 bg-background/95 backdrop-blur-sm py-4 -mx-4 px-4 mb-12">
           <div className="flex justify-center gap-4">
@@ -195,7 +191,6 @@ export const SeasonsSection = () => {
               );
             })}
           </div>
-=======
         {/* Season Tabs - Sticky */}
         <div 
           ref={tabsRef}
@@ -223,7 +218,6 @@ export const SeasonsSection = () => {
               </button>
             );
           })}
->>>>>>> c84a5d46924e28a1491fe339e26d11eb80333d41
         </div>
 
         {/* Spacer when tabs are sticky */}
@@ -272,16 +266,13 @@ export const SeasonsSection = () => {
           </div>
         </div>
 
-<<<<<<< HEAD
         {/* Gallery Grid - Fixed 2 columns on mobile, 3 on larger screens */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-=======
         {/* Gallery Grid - 3x3 for both seasons */}
         <div className={cn(
           "grid grid-cols-3 gap-4 transition-all duration-300",
           isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"
         )}>
->>>>>>> c84a5d46924e28a1491fe339e26d11eb80333d41
           {currentGalleryForLightbox.map((image, index) => (
             <div 
               key={`${activeSeason}-${index}`}
