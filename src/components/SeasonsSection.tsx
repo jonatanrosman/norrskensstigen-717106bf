@@ -230,16 +230,13 @@ export const SeasonsSection = () => {
         {isSticky && <div className="h-16" />}
 
         {/* Season Content */}
-<<<<<<< HEAD
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16">
           {/* Image */}
-=======
         <div className={cn(
           "grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16 transition-all duration-300",
           isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
         )}>
           {/* Image - consistent layout for both seasons */}
->>>>>>> c84a5d46924e28a1491fe339e26d11eb80333d41
           <div className="relative rounded-3xl overflow-hidden shadow-elevated group h-[300px] md:h-[400px]">
             <img
               src={seasonHeroImages[activeSeason]}
