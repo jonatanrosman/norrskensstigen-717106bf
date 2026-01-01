@@ -61,8 +61,8 @@ Detta meddelande skickades via kontaktformuläret på norrskensstigen.se
 
     // Send email using Resend
     const data = await resend.emails.send({
-      from: 'Norrskensstigen <onboarding@resend.dev>', // Resend's test email
-      to: ['info@norrskensstigen.se'],
+      from: "Norrskensstigen <info@norrskensstigen.se>",
+        to: ["info@norrskensstigen.se"],
       replyTo: email,
       subject: `Bokningsförfrågan från ${name}`,
       html: htmlContent,
