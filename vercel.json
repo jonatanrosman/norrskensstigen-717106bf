@@ -1,4 +1,26 @@
 {
+  "redirects": [
+    {
+      "source": "/priser-bokning.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/villkor.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/vinter.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/var-sommar-host.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/:path*",
