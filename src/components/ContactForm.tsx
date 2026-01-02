@@ -31,7 +31,7 @@ const winterPricing = [
   { week: 1, dates: '27/12 2025 - 3/1 2026', price: '28 395 kr', status: 'Bokad' },
   { week: 2, dates: '3/1 - 10/1 2026', price: '13 595 kr', status: 'Bokad' },
   { week: 3, dates: '10/1 - 17/1 2026', price: '13 595 kr', status: 'Bokad' },
-  { week: 4, dates: '17/1 - 24/1 2026', price: '12 000 kr', originalPrice: '15 000 kr', status: 'Ledig' },
+  { week: 4, dates: '17/1 - 24/1 2026', price: '9 900 kr', originalPrice: '15 000 kr', status: 'Ledig' },
   { week: 5, dates: '24/1 - 31/1 2026', price: '16 395 kr', status: 'Bokad' },
   { week: 6, dates: '31/1 - 7/2 2026', price: '17 000 kr', status: 'Bokad' },
   { week: 7, dates: '7/2 - 14/2 2026', price: '27 495 kr', status: 'Bokad' },
