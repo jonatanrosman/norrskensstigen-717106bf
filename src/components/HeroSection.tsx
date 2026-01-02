@@ -108,13 +108,10 @@ export const HeroSection = ({ heroImage }: HeroSectionProps) => {
       </div>
 
       {/* Scroll indicator */}
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center animate-fade-up opacity-0"
-        style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}
-      >
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-fade-up opacity-0" style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}>
         <a
           href="#cabin"
-          className="flex flex-col items-center justify-center gap-2 text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+          className="flex flex-col items-center gap-2 text-primary-foreground/60 hover:text-primary-foreground transition-colors"
         >
           <span className="text-xs tracking-widest uppercase text-center">{t.hero.explore}</span>
           <ChevronDown className="animate-bounce" size={24} />
