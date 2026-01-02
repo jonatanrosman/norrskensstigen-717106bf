@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { Snowflake, Sun, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Winter images
+// Winter images - 01 as hero, 02-10 as gallery
 import winter1 from '@/assets/seasons/winter-1.jpg';
 import winter2 from '@/assets/seasons/winter-2.jpg';
 import winter3 from '@/assets/seasons/winter-3.jpg';
@@ -15,7 +15,7 @@ import winter8 from '@/assets/seasons/winter-8.jpg';
 import winter9 from '@/assets/seasons/winter-9.jpg';
 import winter10 from '@/assets/seasons/winter-10.jpg';
 
-// Summer images
+// Summer images - 01 as hero, 02-10 as gallery
 import summer1 from '@/assets/seasons/summer-1.jpg';
 import summer2 from '@/assets/seasons/summer-2.jpg';
 import summer3 from '@/assets/seasons/summer-3.jpg';
@@ -29,11 +29,13 @@ import summer10 from '@/assets/seasons/summer-10.jpg';
 
 type Season = 'winter' | 'summer';
 
+// Hero images (image 01)
 const seasonHeroImages = {
   winter: winter1,
   summer: summer1,
 };
 
+// Gallery images (images 02-10)
 const winterGalleryImages = [
   winter2, winter3, winter4, winter5, winter6,
   winter7, winter8, winter9, winter10
@@ -44,50 +46,38 @@ const summerGalleryImages = [
   summer7, summer8, summer9, summer10
 ];
 
-const allImages = [
-  winter1, winter2, winter3, winter4, winter5, winter6, winter7, winter8, winter9, winter10,
-  summer1, summer2, summer3, summer4, summer5, summer6, summer7, summer8, summer9, summer10
-];
-
 export const SeasonsSection = () => {
   const { t, language } = useLanguage();
   const [activeSeason, setActiveSeason] = useState<Season>('winter');
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const [showFloatingButtons, setShowFloatingButtons] = useState(false);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
-  // Preload all images
+  // Preload all images on mount
   useEffect(() => {
+    const allImages = [
+      ...winterGalleryImages,
+      ...summerGalleryImages,
+      seasonHeroImages.winter,
+      seasonHeroImages.summer
+    ];
+    
     allImages.forEach((src) => {
       const img = new Image();
       img.src = src;
     });
   }, []);
 
-  // Handle floating buttons visibility
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current && tabsRef.current) {
-        const sectionRect = sectionRef.current.getBoundingClientRect();
-        const tabsRect = tabsRef.current.getBoundingClientRect();
-        const headerOffset = 80;
-        
-        // Show floating buttons when original tabs are scrolled out of view
-        // but section is still visible
-        const tabsOutOfView = tabsRect.bottom < headerOffset;
-        const sectionStillVisible = sectionRect.bottom > 200;
-        
-        setShowFloatingButtons(tabsOutOfView && sectionStillVisible);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleSeasonChange = (newSeason: Season) => {
+    if (newSeason === activeSeason) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setActiveSeason(newSeason);
+      setIsTransitioning(false);
+    }, 300);
+  };
 
   const currentGalleryForLightbox = activeSeason === 'winter' 
     ? winterGalleryImages 
@@ -100,127 +90,100 @@ export const SeasonsSection = () => {
 
   const currentSeason = t.seasons[activeSeason];
 
-  const handleSeasonChange = (newSeason: Season) => {
-    if (newSeason === activeSeason) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveSeason(newSeason);
-      setTimeout(() => setIsTransitioning(false), 50);
-    }, 150);
-  };
-
   const openLightbox = (index: number) => {
     setCurrentImageIndex(index);
     setLightboxOpen(true);
   };
 
-  const closeLightbox = () => setLightboxOpen(false);
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
 
-  const goToPrevious = useCallback(() => {
-    setCurrentImageIndex((prev) => prev === 0 ? currentGalleryForLightbox.length - 1 : prev - 1);
-  }, [currentGalleryForLightbox.length]);
+  const goToPrevious = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? currentGalleryForLightbox.length - 1 : prev - 1
+    );
+  };
 
-  const goToNext = useCallback(() => {
-    setCurrentImageIndex((prev) => prev === currentGalleryForLightbox.length - 1 ? 0 : prev + 1);
-  }, [currentGalleryForLightbox.length]);
+  const goToNext = () => {
+    setCurrentImageIndex((prev) => 
+      prev === currentGalleryForLightbox.length - 1 ? 0 : prev + 1
+    );
+  };
 
-  // Touch handlers for swipe
-  const minSwipeDistance = 50;
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') goToPrevious();
+    if (e.key === 'ArrowRight') goToNext();
+  };
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
+  // Handle touch swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
 
-  const onTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
 
-  const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
-    
-    if (isLeftSwipe) {
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
       goToNext();
-    } else if (isRightSwipe) {
+    }
+    if (touchStart - touchEnd < -75) {
       goToPrevious();
     }
   };
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!lightboxOpen) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') goToPrevious();
-      if (e.key === 'ArrowRight') goToNext();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen, goToPrevious, goToNext]);
-
-  const SeasonButtons = ({ isFloating = false }: { isFloating?: boolean }) => (
-    <div className={cn(
-      "flex justify-center gap-4",
-      isFloating && "px-4 py-3 bg-white/70 backdrop-blur-xl rounded-full shadow-elevated border border-white/50"
-    )}>
-      {seasons.map((season) => {
-        const Icon = season.icon;
-        const isActive = activeSeason === season.id;
-        return (
-          <button
-            key={season.id}
-            onClick={() => handleSeasonChange(season.id)}
-            className={cn(
-              "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
-              isActive
-                ? "bg-primary text-primary-foreground shadow-elevated scale-105"
-                : "bg-background text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
-            )}
-          >
-            <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
-            <span>{season.label}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-
   return (
-    <section ref={sectionRef} id="seasons" className="py-24 md:py-32 bg-card relative overflow-hidden">
+    <section id="seasons" className="py-24 md:py-32 bg-background relative overflow-hidden">
+      {/* Decorative background */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary rounded-full blur-[200px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent rounded-full blur-[150px]" />
       </div>
 
       <div className="container mx-auto px-4 relative">
+        {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
             {t.seasons.title}
           </h2>
         </div>
 
-        {/* Original buttons - always in place */}
-        <div ref={tabsRef} className="flex justify-center mb-12">
-          <SeasonButtons />
+        {/* Season Tabs - Sticky on scroll */}
+        <div className="sticky top-20 z-20 bg-background/95 backdrop-blur-sm py-4 -mx-4 px-4 mb-12">
+          <div className="flex justify-center gap-4">
+            {seasons.map((season) => {
+              const Icon = season.icon;
+              const isActive = activeSeason === season.id;
+              return (
+                <button
+                  key={season.id}
+                  onClick={() => handleSeasonChange(season.id)}
+                  className={cn(
+                    "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-elevated scale-105"
+                      : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
+                  )}
+                >
+                  <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
+                  <span>{season.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Floating buttons - appear when original buttons scroll out */}
+        {/* Season Content with fade transition */}
         <div className={cn(
-          "fixed top-20 left-0 right-0 z-30 flex justify-center transition-all duration-300",
-          showFloatingButtons ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+          "transition-opacity duration-300",
+          isTransitioning ? "opacity-0" : "opacity-100"
         )}>
-          <SeasonButtons isFloating />
-        </div>
-
-        {/* Content with fixed heights to prevent jumping */}
-        <div className="min-h-[500px] md:min-h-[450px]">
-          <div className={cn(
-            "grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16 transition-opacity duration-200",
-            isTransitioning ? "opacity-0" : "opacity-100"
-          )}>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16">
+            {/* Image */}
             <div className="relative rounded-3xl overflow-hidden shadow-elevated group h-[300px] md:h-[400px]">
               <img
                 src={seasonHeroImages[activeSeason]}
@@ -230,72 +193,99 @@ export const SeasonsSection = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-night-sky/40 via-transparent to-transparent" />
             </div>
 
-            <div className="space-y-6 min-h-[350px] md:min-h-[400px]">
-              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground min-h-[60px]">
+            {/* Content */}
+            <div className="space-y-6">
+              <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
                 {currentSeason.title}
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed min-h-[120px]">
+              <p className="text-lg text-muted-foreground leading-relaxed">
                 {currentSeason.description}
               </p>
 
+              {/* Highlights */}
               <div className="grid grid-cols-2 gap-4 pt-4">
                 {currentSeason.highlights.map((highlight, index) => (
-                  <div key={index} className="flex items-center gap-3 p-4 bg-background rounded-xl shadow-soft hover:shadow-elevated transition-all duration-300">
-                    <Check className="w-4 h-4 text-primary flex-shrink-0" />
+                  <div 
+                    key={index}
+                    className="flex items-center gap-3 p-4 bg-card rounded-xl shadow-soft hover:shadow-elevated transition-all duration-300"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-4 h-4 text-primary" />
+                    </div>
                     <span className="text-sm font-medium text-foreground">{highlight}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </div>
 
-        <div className={cn(
-          "grid grid-cols-2 md:grid-cols-3 gap-4 transition-opacity duration-200",
-          isTransitioning ? "opacity-0" : "opacity-100"
-        )}>
-          {currentGalleryForLightbox.map((image, index) => (
-            <div key={`${activeSeason}-${index}`} className="cursor-pointer group" onClick={() => openLightbox(index)}>
-              <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
-                <img src={image} alt="" className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105" />
+          {/* Gallery Grid - Fixed 2 columns on mobile, 3 on larger screens */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {currentGalleryForLightbox.map((image, index) => (
+              <div 
+                key={index}
+                className="cursor-pointer group"
+                onClick={() => openLightbox(index)}
+              >
+                <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
+                  <img
+                    src={image}
+                    alt={`${currentSeason.name} ${index + 2}`}
+                    className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-night-sky/0 group-hover:bg-night-sky/20 transition-colors duration-300" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Lightbox with translucent white background and blur */}
+      {/* Lightbox with swipe support */}
       {lightboxOpen && (
         <div 
-          className="fixed inset-0 z-50 bg-white/80 backdrop-blur-xl flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-night-sky/60 backdrop-blur-sm flex items-center justify-center"
           onClick={closeLightbox}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground z-10">
+          {/* Close button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors z-10"
+          >
             <X className="w-8 h-8" />
           </button>
-          <button 
-            onClick={(e) => { e.stopPropagation(); goToPrevious(); }} 
-            className="absolute left-4 p-3 text-foreground/80 hover:text-foreground bg-white/50 backdrop-blur rounded-full"
+
+          {/* Previous button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+            className="absolute left-4 p-3 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-10"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
-          <img 
-            src={currentGalleryForLightbox[currentImageIndex]} 
-            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-elevated" 
-            onClick={(e) => e.stopPropagation()} 
-            alt=""
+
+          {/* Image */}
+          <img
+            src={currentGalleryForLightbox[currentImageIndex]}
+            alt={`${currentSeason.name} ${currentImageIndex + 2}`}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+            onClick={(e) => e.stopPropagation()}
           />
-          <button 
-            onClick={(e) => { e.stopPropagation(); goToNext(); }} 
-            className="absolute right-4 p-3 text-foreground/80 hover:text-foreground bg-white/50 backdrop-blur rounded-full"
+
+          {/* Next button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); goToNext(); }}
+            className="absolute right-4 p-3 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full transition-all z-10"
           >
             <ChevronRight className="w-8 h-8" />
           </button>
+
           {/* Image counter */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-foreground/70 text-sm bg-white/50 backdrop-blur px-4 py-2 rounded-full">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 text-sm">
             {currentImageIndex + 1} / {currentGalleryForLightbox.length}
           </div>
         </div>
