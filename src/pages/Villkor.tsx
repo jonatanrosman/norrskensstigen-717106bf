@@ -67,7 +67,7 @@ const Villkor = () => {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-background">
-        <Header isDarkBackground={false} />
+        <Header />
         <VillkorContent />
         <Footer />
       </div>

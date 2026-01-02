@@ -7,7 +7,7 @@ import logo from '@/assets/logo.png';
 import { useLocation } from 'react-router-dom';
 
 export const Header = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -44,6 +44,9 @@ export const Header = () => {
   const navLinks = [
     { href: '#cabin', label: t.nav.cabin },
     { href: '#seasons', label: t.nav.seasons },
+    { href: '#inventory', label: language === 'sv' ? 'Inventarier' : language === 'de' ? 'Ausstattung' : 'Equipment' },
+    { href: '#location', label: language === 'sv' ? 'Hitta hit' : language === 'de' ? 'Anfahrt' : 'Location' },
+    { href: '#pricing', label: language === 'sv' ? 'Priser' : language === 'de' ? 'Preise' : 'Pricing' },
     { href: '#contact', label: t.nav.contact },
   ];
 
