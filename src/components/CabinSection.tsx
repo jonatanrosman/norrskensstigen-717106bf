@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   Mountain, Flame, ThermometerSun, Wifi, Tv, Gamepad2, 
@@ -50,6 +50,8 @@ const galleryImages = [
 export const CabinSection = () => {
   const { t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const stats = [
     { icon: Bed, value: '10+2', label: t.cabin.beds },
@@ -71,15 +73,40 @@ export const CabinSection = () => {
     { icon: Wind, label: t.cabin.features.drying },
   ];
 
-  const handlePrevImage = () => {
+  const handlePrevImage = useCallback(() => {
     if (selectedImage !== null) {
       setSelectedImage(selectedImage === 0 ? galleryImages.length - 1 : selectedImage - 1);
     }
-  };
+  }, [selectedImage]);
 
-  const handleNextImage = () => {
+  const handleNextImage = useCallback(() => {
     if (selectedImage !== null) {
       setSelectedImage(selectedImage === galleryImages.length - 1 ? 0 : selectedImage + 1);
+    }
+  }, [selectedImage]);
+
+  // Touch handlers for swipe
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      handleNextImage();
+    } else if (isRightSwipe) {
+      handlePrevImage();
     }
   };
 
@@ -94,7 +121,7 @@ export const CabinSection = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedImage]);
+  }, [selectedImage, handlePrevImage, handleNextImage]);
 
   return (
     <section id="cabin" className="py-24 md:py-32 bg-gradient-frost">
@@ -163,16 +190,19 @@ export const CabinSection = () => {
         </div>
       </div>
 
-      {/* Fullscreen Lightbox */}
+      {/* Fullscreen Lightbox with translucent white background */}
       {selectedImage !== null && (
         <div 
-          className="fixed inset-0 z-50 bg-night-sky/95 flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/80 backdrop-blur-xl flex items-center justify-center"
           onClick={() => setSelectedImage(null)}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
         >
           {/* Close button */}
           <button
             onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-primary-foreground/10 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+            className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -180,7 +210,7 @@ export const CabinSection = () => {
           {/* Previous button */}
           <button
             onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-foreground/10 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
           </button>
@@ -188,7 +218,7 @@ export const CabinSection = () => {
           {/* Next button */}
           <button
             onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary-foreground/10 text-primary-foreground flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
           </button>
@@ -197,12 +227,12 @@ export const CabinSection = () => {
           <img
             src={galleryImages[selectedImage].src}
             alt={galleryImages[selectedImage].alt}
-            className="max-w-[90vw] max-h-[85vh] object-contain"
+            className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-elevated"
             onClick={(e) => e.stopPropagation()}
           />
           
           {/* Image counter */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-primary-foreground/70 text-sm bg-night-sky/50 px-4 py-2 rounded-full">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-foreground/70 text-sm bg-white/50 backdrop-blur px-4 py-2 rounded-full">
             {selectedImage + 1} / {galleryImages.length}
           </div>
         </div>

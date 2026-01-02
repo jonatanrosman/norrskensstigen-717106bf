@@ -77,7 +77,7 @@ Detta meddelande skickades via kontaktformuläret på norrskensstigen.se
     const data = await resend.emails.send({
       from: 'Norrskensstigen <info@norrskensstigen.se>',
       to: ['info@norrskensstigen.se'],
-      replyTo: email,
+      reply_to: email,
       subject: `Bokningsförfrågan från ${name}`,
       html: htmlContent,
       text: textContent,

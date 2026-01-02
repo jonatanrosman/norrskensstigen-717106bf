@@ -104,19 +104,11 @@ const VISIBLE_ITEMS_COUNT = 3;
 
 export const InventorySection = () => {
   const { language } = useLanguage();
-  const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
+  const [allExpanded, setAllExpanded] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  const toggleCategory = (idx: number) => {
-    setExpandedCategories(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(idx)) {
-        newSet.delete(idx);
-      } else {
-        newSet.add(idx);
-      }
-      return newSet;
-    });
+  const toggleAllCategories = () => {
+    setAllExpanded(!allExpanded);
   };
 
   const scrollCarousel = (direction: 'left' | 'right') => {
@@ -129,11 +121,12 @@ export const InventorySection = () => {
     }
   };
 
+  // Use non-breaking space between Norrskensstigen and 12A
   const title = language === 'sv' 
-    ? 'Finns på Norrskensstigen 12A' 
+    ? 'Finns på Norrskensstigen\u00A012A' 
     : language === 'de' 
-      ? 'Vorhanden auf Norrskensstigen 12A' 
-      : 'Available at Norrskensstigen 12A';
+      ? 'Vorhanden auf Norrskensstigen\u00A012A' 
+      : 'Available at Norrskensstigen\u00A012A';
 
   const subtitle = language === 'sv'
     ? 'Ett urval av det som oftast efterfrågas. Undrar ni om något specifikt finns, maila info@norrskensstigen.se'
@@ -145,7 +138,7 @@ export const InventorySection = () => {
   const showLessLabel = language === 'sv' ? 'Visa mindre' : language === 'de' ? 'Weniger anzeigen' : 'Show less';
 
   return (
-    <section className="py-24 md:py-32 bg-background">
+    <section id="inventory" className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
@@ -174,17 +167,16 @@ export const InventorySection = () => {
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Carousel */}
+          {/* Carousel - starts with same margin as container on mobile */}
           <div 
             ref={carouselRef}
-            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-4 px-4 md:mx-0 md:px-0"
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {inventoryData.map((category, idx) => {
               const Icon = category.icon;
-              const isExpanded = expandedCategories.has(idx);
               const hasMoreItems = category.items.length > VISIBLE_ITEMS_COUNT;
-              const visibleItems = isExpanded ? category.items : category.items.slice(0, VISIBLE_ITEMS_COUNT);
+              const visibleItems = allExpanded ? category.items : category.items.slice(0, VISIBLE_ITEMS_COUNT);
               
               return (
                 <div
@@ -212,10 +204,10 @@ export const InventorySection = () => {
                   </ul>
                   {hasMoreItems && (
                     <button
-                      onClick={() => toggleCategory(idx)}
+                      onClick={toggleAllCategories}
                       className="mt-3 text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
                     >
-                      {isExpanded ? (
+                      {allExpanded ? (
                         <>
                           {showLessLabel}
                           <ChevronUp className="w-4 h-4" />
