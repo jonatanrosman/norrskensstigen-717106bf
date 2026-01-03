@@ -22,7 +22,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-night-sky text-primary-foreground py-16 md:py-20">
+    <footer className="bg-[#6F1024] text-primary-foreground py-16 md:py-20">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}

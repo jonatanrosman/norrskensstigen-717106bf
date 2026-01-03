@@ -61,10 +61,21 @@ export const SeasonsSection = () => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
-  // Preload all images
+  // Preload all images immediately and track loading
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
   useEffect(() => {
+    let loadedCount = 0;
+    const totalImages = allImages.length;
+    
     allImages.forEach((src) => {
       const img = new Image();
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === totalImages) {
+          setImagesLoaded(true);
+        }
+      };
       img.src = src;
     });
   }, []);
@@ -267,32 +278,40 @@ export const SeasonsSection = () => {
       {/* Lightbox with translucent white background and blur */}
       {lightboxOpen && (
         <div 
-          className="fixed inset-0 z-50 bg-white/80 backdrop-blur-xl flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
           onClick={closeLightbox}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
         >
-          <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground z-10">
-            <X className="w-8 h-8" />
+          <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur flex items-center justify-center">
+            <X className="w-6 h-6" />
           </button>
           <button 
             onClick={(e) => { e.stopPropagation(); goToPrevious(); }} 
-            className="absolute left-4 p-3 text-foreground/80 hover:text-foreground bg-white/50 backdrop-blur rounded-full"
+            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
           </button>
-          <img 
-            src={currentGalleryForLightbox[currentImageIndex]} 
-            className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-elevated" 
-            onClick={(e) => e.stopPropagation()} 
-            alt=""
-          />
+          
+          {/* Swipeable image container */}
+          <div 
+            className="w-full h-full flex items-center justify-center overflow-hidden"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <img 
+              src={currentGalleryForLightbox[currentImageIndex]} 
+              className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-elevated select-none" 
+              onClick={(e) => e.stopPropagation()} 
+              alt=""
+              draggable={false}
+            />
+          </div>
+          
           <button 
             onClick={(e) => { e.stopPropagation(); goToNext(); }} 
-            className="absolute right-4 p-3 text-foreground/80 hover:text-foreground bg-white/50 backdrop-blur rounded-full"
+            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
           </button>
           {/* Image counter */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-foreground/70 text-sm bg-white/50 backdrop-blur px-4 py-2 rounded-full">
