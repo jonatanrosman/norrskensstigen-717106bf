@@ -7,6 +7,11 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Offset for fixed header when scrolling to sections */
+section[id] {
+  scroll-margin-top: 100px;
+}
 @layer base {
   :root {
     /* Nordic Winter Palette */

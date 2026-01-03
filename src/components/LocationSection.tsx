@@ -148,12 +148,12 @@ export const LocationSection = () => {
       {/* Lightbox */}
       {lightboxOpen && (
         <div 
-          className="fixed inset-0 z-50 bg-night-sky/95 flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
           onClick={() => setLightboxOpen(false)}
         >
           <button
             onClick={() => setLightboxOpen(false)}
-            className="absolute top-4 right-4 p-2 text-white/80 hover:text-white transition-colors z-10"
+            className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground transition-colors z-10"
           >
             <X className="w-8 h-8" />
           </button>
