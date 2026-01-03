@@ -193,11 +193,8 @@ export const CabinSection = () => {
       {/* Fullscreen Lightbox with translucent white background */}
       {selectedImage !== null && (
         <div 
-          className="fixed inset-0 z-50 bg-white/80 backdrop-blur-xl flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
           onClick={() => setSelectedImage(null)}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
         >
           {/* Close button */}
           <button
@@ -223,13 +220,21 @@ export const CabinSection = () => {
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
           </button>
 
-          {/* Image */}
-          <img
-            src={galleryImages[selectedImage].src}
-            alt={galleryImages[selectedImage].alt}
-            className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-elevated"
-            onClick={(e) => e.stopPropagation()}
-          />
+          {/* Swipeable image container */}
+          <div 
+            className="w-full h-full flex items-center justify-center overflow-hidden"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <img
+              src={galleryImages[selectedImage].src}
+              alt={galleryImages[selectedImage].alt}
+              className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-elevated select-none"
+              onClick={(e) => e.stopPropagation()}
+              draggable={false}
+            />
+          </div>
           
           {/* Image counter */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-foreground/70 text-sm bg-white/50 backdrop-blur px-4 py-2 rounded-full">

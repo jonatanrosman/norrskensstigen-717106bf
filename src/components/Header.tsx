@@ -23,9 +23,7 @@ export const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const smoothScrollTo = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const targetId = href.replace('#', '');
+  const smoothScrollTo = useCallback((targetId: string) => {
     const element = document.getElementById(targetId);
     
     if (element) {
@@ -40,6 +38,18 @@ export const Header = () => {
     }
     setIsMobileMenuOpen(false);
   }, []);
+
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    
+    // If we're on a different page (like /villkor), navigate to home first
+    if (location.pathname !== '/') {
+      window.location.href = '/' + href;
+    } else {
+      smoothScrollTo(targetId);
+    }
+  }, [location.pathname, smoothScrollTo]);
 
   const navLinks = [
     { href: '#cabin', label: t.nav.cabin },
@@ -77,7 +87,7 @@ export const Header = () => {
             <a
               key={link.href}
               href={link.href}
-              onClick={(e) => smoothScrollTo(e, link.href)}
+              onClick={(e) => handleNavClick(e, link.href)}
               className={cn(
                 "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                 isScrolled
@@ -122,14 +132,14 @@ export const Header = () => {
       {/* Mobile Menu */}
       <div className={cn(
         "md:hidden absolute top-full left-0 right-0 bg-card backdrop-blur-lg shadow-elevated transition-all duration-300 overflow-hidden",
-        isMobileMenuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+        isMobileMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
       )}>
         <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              onClick={(e) => smoothScrollTo(e, link.href)}
+              onClick={(e) => handleNavClick(e, link.href)}
               className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
             >
               {link.label}
