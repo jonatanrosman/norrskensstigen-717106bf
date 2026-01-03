@@ -27,14 +27,7 @@ export const Header = () => {
     const element = document.getElementById(targetId);
     
     if (element) {
-      const headerOffset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
     setIsMobileMenuOpen(false);
   }, []);
@@ -45,9 +38,23 @@ export const Header = () => {
     
     // If we're on a different page (like /villkor), navigate to home first
     if (location.pathname !== '/') {
-      window.location.href = '/' + href;
+      // Store the target section in sessionStorage and navigate
+      sessionStorage.setItem('scrollToSection', targetId);
+      window.location.href = '/';
     } else {
       smoothScrollTo(targetId);
+    }
+  }, [location.pathname, smoothScrollTo]);
+
+  // Check for stored scroll target on mount (when navigating from other pages)
+  useEffect(() => {
+    const scrollTarget = sessionStorage.getItem('scrollToSection');
+    if (scrollTarget && location.pathname === '/') {
+      sessionStorage.removeItem('scrollToSection');
+      // Small delay to ensure page is loaded
+      setTimeout(() => {
+        smoothScrollTo(scrollTarget);
+      }, 100);
     }
   }, [location.pathname, smoothScrollTo]);
 
@@ -58,6 +65,7 @@ export const Header = () => {
     { href: '#location', label: language === 'sv' ? 'Hitta hit' : language === 'de' ? 'Anfahrt' : 'Location' },
     { href: '#pricing', label: language === 'sv' ? 'Priser' : language === 'de' ? 'Preise' : 'Pricing' },
     { href: '#contact', label: t.nav.contact },
+    { href: '/villkor', label: language === 'sv' ? 'Villkor' : language === 'de' ? 'AGB' : 'Terms', isPage: true },
   ];
 
   // Determine text colors based on page and scroll state
@@ -82,23 +90,40 @@ export const Header = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className={cn(
-                "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
-                isScrolled
-                  ? "text-foreground/80 hover:text-foreground"
-                  : shouldUseDarkText
+            'isPage' in link && link.isPage ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
+                  isScrolled
                     ? "text-foreground/80 hover:text-foreground"
-                    : "text-primary-foreground/80 hover:text-primary-foreground"
-              )}
-            >
-              {link.label}
-            </a>
+                    : shouldUseDarkText
+                      ? "text-foreground/80 hover:text-foreground"
+                      : "text-primary-foreground/80 hover:text-primary-foreground"
+                )}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={cn(
+                  "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
+                  isScrolled
+                    ? "text-foreground/80 hover:text-foreground"
+                    : shouldUseDarkText
+                      ? "text-foreground/80 hover:text-foreground"
+                      : "text-primary-foreground/80 hover:text-primary-foreground"
+                )}
+              >
+                {link.label}
+              </a>
+            )
           ))}
         </nav>
 
@@ -132,18 +157,29 @@ export const Header = () => {
       {/* Mobile Menu */}
       <div className={cn(
         "md:hidden absolute top-full left-0 right-0 bg-card backdrop-blur-lg shadow-elevated transition-all duration-300 overflow-hidden",
-        isMobileMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
+        isMobileMenuOpen ? "max-h-[450px] opacity-100" : "max-h-0 opacity-0"
       )}>
         <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
-            >
-              {link.label}
-            </a>
+            'isPage' in link && link.isPage ? (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
+              >
+                {link.label}
+              </a>
+            )
           ))}
         </nav>
       </div>
