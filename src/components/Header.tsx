@@ -4,7 +4,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 export const Header = () => {
   const { t, language } = useLanguage();
@@ -111,9 +111,9 @@ export const Header = () => {
                 {link.label}
               </a>
             ) : (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 className={cn(
                   "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                   isScrolled
@@ -124,7 +124,7 @@ export const Header = () => {
                 )}
               >
                 {link.label}
-              </a>
+              </Link>
             )
           ))}
         </nav>
@@ -173,14 +173,14 @@ export const Header = () => {
                 {link.label}
               </a>
             ) : (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
               >
                 {link.label}
-              </a>
+              </Link>
             )
           ))}
         </nav>
