@@ -10,7 +10,7 @@ html {
 
 /* Offset for fixed header when scrolling to sections */
 section[id] {
-  scroll-margin-top: 100px;
+  scroll-margin-top: 0px;
 }
 @layer base {
   :root {

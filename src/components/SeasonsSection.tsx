@@ -60,22 +60,12 @@ export const SeasonsSection = () => {
   const [showFloatingButtons, setShowFloatingButtons] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
 
-  // Preload all images immediately and track loading
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  
+  // Preload all images immediately
   useEffect(() => {
-    let loadedCount = 0;
-    const totalImages = allImages.length;
-    
     allImages.forEach((src) => {
       const img = new Image();
-      img.onload = () => {
-        loadedCount++;
-        if (loadedCount === totalImages) {
-          setImagesLoaded(true);
-        }
-      };
       img.src = src;
     });
   }, []);
@@ -88,8 +78,6 @@ export const SeasonsSection = () => {
         const tabsRect = tabsRef.current.getBoundingClientRect();
         const headerOffset = 80;
         
-        // Show floating buttons when original tabs are scrolled out of view
-        // but section is still visible
         const tabsOutOfView = tabsRect.bottom < headerOffset;
         const sectionStillVisible = sectionRect.bottom > 200;
         
@@ -128,11 +116,15 @@ export const SeasonsSection = () => {
   const closeLightbox = () => setLightboxOpen(false);
 
   const goToPrevious = useCallback(() => {
+    setSlideDirection('right');
     setCurrentImageIndex((prev) => prev === 0 ? currentGalleryForLightbox.length - 1 : prev - 1);
+    setTimeout(() => setSlideDirection(null), 300);
   }, [currentGalleryForLightbox.length]);
 
   const goToNext = useCallback(() => {
+    setSlideDirection('left');
     setCurrentImageIndex((prev) => prev === currentGalleryForLightbox.length - 1 ? 0 : prev + 1);
+    setTimeout(() => setSlideDirection(null), 300);
   }, [currentGalleryForLightbox.length]);
 
   // Touch handlers for swipe
@@ -213,12 +205,12 @@ export const SeasonsSection = () => {
           </h2>
         </div>
 
-        {/* Original buttons - always in place */}
+        {/* Original buttons */}
         <div ref={tabsRef} className="flex justify-center mb-12">
           <SeasonButtons />
         </div>
 
-        {/* Floating buttons - appear when original buttons scroll out */}
+        {/* Floating buttons */}
         <div className={cn(
           "fixed top-20 left-0 right-0 z-30 flex justify-center transition-all duration-300",
           showFloatingButtons ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
@@ -226,7 +218,7 @@ export const SeasonsSection = () => {
           <SeasonButtons isFloating />
         </div>
 
-        {/* Content with fixed heights to prevent jumping */}
+        {/* Content with fixed heights */}
         <div className="min-h-[500px] md:min-h-[450px]">
           <div className={cn(
             "grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16 transition-opacity duration-200",
@@ -275,7 +267,7 @@ export const SeasonsSection = () => {
         </div>
       </div>
 
-      {/* Lightbox with translucent white background and blur */}
+      {/* Lightbox with carousel-style slide animation */}
       {lightboxOpen && (
         <div 
           className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
@@ -291,20 +283,28 @@ export const SeasonsSection = () => {
             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
           </button>
           
-          {/* Swipeable image container */}
+          {/* Swipeable carousel container */}
           <div 
-            className="w-full h-full flex items-center justify-center overflow-hidden"
+            className="relative w-full h-full flex items-center justify-center overflow-hidden"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <img 
-              src={currentGalleryForLightbox[currentImageIndex]} 
-              className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-elevated select-none" 
-              onClick={(e) => e.stopPropagation()} 
-              alt=""
-              draggable={false}
-            />
+            <div className="relative w-[90vw] h-[85vh] flex items-center justify-center">
+              <img 
+                key={currentImageIndex}
+                src={currentGalleryForLightbox[currentImageIndex]} 
+                className={cn(
+                  "max-w-full max-h-full object-contain rounded-lg shadow-elevated select-none",
+                  "transition-all duration-300 ease-out",
+                  slideDirection === 'left' && "animate-[slideInLeft_0.3s_ease-out]",
+                  slideDirection === 'right' && "animate-[slideInRight_0.3s_ease-out]"
+                )}
+                onClick={(e) => e.stopPropagation()} 
+                alt=""
+                draggable={false}
+              />
+            </div>
           </div>
           
           <button 
@@ -313,12 +313,36 @@ export const SeasonsSection = () => {
           >
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
           </button>
-          {/* Image counter */}
+          
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-foreground/70 text-sm bg-white/50 backdrop-blur px-4 py-2 rounded-full">
             {currentImageIndex + 1} / {currentGalleryForLightbox.length}
           </div>
         </div>
       )}
+      
+      <style>{`
+        @keyframes slideInLeft {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </section>
   );
 };
