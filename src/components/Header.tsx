@@ -59,13 +59,13 @@ export const Header = () => {
   }, [location.pathname, smoothScrollTo]);
 
   const navLinks = [
-    { href: '#cabin', label: t.nav.cabin },
-    { href: '#seasons', label: t.nav.seasons },
-    { href: '#inventory', label: language === 'sv' ? 'Inventarier' : language === 'de' ? 'Ausstattung' : 'Equipment' },
-    { href: '#location', label: language === 'sv' ? 'Hitta hit' : language === 'de' ? 'Anfahrt' : 'Location' },
-    { href: '#pricing', label: language === 'sv' ? 'Priser' : language === 'de' ? 'Preise' : 'Pricing' },
-    { href: '#contact', label: t.nav.contact },
-    { href: '/villkor', label: language === 'sv' ? 'Villkor' : language === 'de' ? 'AGB' : 'Terms', isPage: true },
+    { href: '#cabin', label: t.nav.cabin, isHash: true },
+    { href: '#seasons', label: t.nav.seasons, isHash: true },
+    { href: '#inventory', label: language === 'sv' ? 'Inventarier' : language === 'de' ? 'Ausstattung' : 'Equipment', isHash: true },
+    { href: '#location', label: language === 'sv' ? 'Hitta hit' : language === 'de' ? 'Anfahrt' : 'Location', isHash: true },
+    { href: '#pricing', label: language === 'sv' ? 'Priser' : language === 'de' ? 'Preise' : 'Pricing', isHash: true },
+    { href: '#contact', label: t.nav.contact, isHash: true },
+    { href: '/villkor', label: language === 'sv' ? 'Bokningsvillkor' : language === 'de' ? 'Buchungsbedingungen' : 'Booking Terms', isHash: false },
   ];
 
   // Determine text colors based on page and scroll state
@@ -77,11 +77,13 @@ export const Header = () => {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         isScrolled
           ? "bg-card/95 backdrop-blur-md shadow-soft py-3"
-          : "bg-transparent py-5"
+          : isLightBgPage
+            ? "bg-card/80 backdrop-blur-sm shadow-soft py-3"
+            : "bg-transparent py-5"
       )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3 group">
+        <a href="/" className="flex items-center gap-3 group">
           <img 
             src={logo} 
             alt="Norrskensstigen logo" 
@@ -92,10 +94,11 @@ export const Header = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
-            'isPage' in link && link.isPage ? (
+            link.isHash ? (
               <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={cn(
                   "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                   isScrolled
@@ -111,7 +114,6 @@ export const Header = () => {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
                 className={cn(
                   "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                   isScrolled
@@ -161,11 +163,11 @@ export const Header = () => {
       )}>
         <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
           {navLinks.map((link) => (
-            'isPage' in link && link.isPage ? (
+            link.isHash ? (
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
               >
                 {link.label}
@@ -174,7 +176,7 @@ export const Header = () => {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
               >
                 {link.label}
