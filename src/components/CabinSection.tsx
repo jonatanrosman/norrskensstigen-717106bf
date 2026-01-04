@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { cn } from '@/lib/utils';
 import { 
   Mountain, Flame, ThermometerSun, Wifi, Tv, Gamepad2, 
   WashingMachine, Droplets, Wind, Bed, Bath, Home, SquareStack,
@@ -51,9 +52,8 @@ export const CabinSection = () => {
   const { t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [currentTranslate, setCurrentTranslate] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
 
   const stats = [
     { icon: Bed, value: '10+2', label: t.cabin.beds },
@@ -77,45 +77,43 @@ export const CabinSection = () => {
 
   const handlePrevImage = useCallback(() => {
     if (selectedImage !== null) {
+      setSlideDirection('right');
       setSelectedImage(selectedImage === 0 ? galleryImages.length - 1 : selectedImage - 1);
+      setTimeout(() => setSlideDirection(null), 300);
     }
   }, [selectedImage]);
 
   const handleNextImage = useCallback(() => {
     if (selectedImage !== null) {
+      setSlideDirection('left');
       setSelectedImage(selectedImage === galleryImages.length - 1 ? 0 : selectedImage + 1);
+      setTimeout(() => setSlideDirection(null), 300);
     }
   }, [selectedImage]);
 
-  // Touch handlers for carousel-like swipe
+  // Touch handlers for swipe
   const minSwipeDistance = 50;
 
   const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
-    setIsDragging(true);
-    setCurrentTranslate(0);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    if (!touchStart || !isDragging) return;
-    const currentPosition = e.targetTouches[0].clientX;
-    const diff = currentPosition - touchStart;
-    setCurrentTranslate(diff);
+    setTouchEnd(e.targetTouches[0].clientX);
   };
 
   const onTouchEnd = () => {
-    setIsDragging(false);
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
     
-    if (Math.abs(currentTranslate) > minSwipeDistance) {
-      if (currentTranslate < 0) {
-        handleNextImage();
-      } else {
-        handlePrevImage();
-      }
+    if (isLeftSwipe) {
+      handleNextImage();
+    } else if (isRightSwipe) {
+      handlePrevImage();
     }
-    
-    setCurrentTranslate(0);
-    setTouchStart(null);
   };
 
   // Prevent background scrolling when lightbox is open
@@ -242,23 +240,22 @@ export const CabinSection = () => {
 
           {/* Swipeable carousel container */}
           <div 
-            ref={containerRef}
-            className="w-full h-full flex items-center justify-center overflow-hidden"
+            className="relative w-full h-full flex items-center justify-center overflow-hidden touch-pan-y"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <div 
-              className="flex items-center transition-transform duration-300 ease-out"
-              style={{ 
-                transform: `translateX(${currentTranslate}px)`,
-                transition: isDragging ? 'none' : 'transform 0.3s ease-out'
-              }}
-            >
+            <div className="relative w-[90vw] h-[85vh] flex items-center justify-center">
               <img
+                key={selectedImage}
                 src={galleryImages[selectedImage].src}
                 alt={galleryImages[selectedImage].alt}
-                className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-elevated select-none"
+                className={cn(
+                  "max-w-full max-h-full object-contain rounded-lg shadow-elevated select-none",
+                  "transition-all duration-300 ease-out",
+                  slideDirection === 'left' && "animate-[slideInLeft_0.3s_ease-out]",
+                  slideDirection === 'right' && "animate-[slideInRight_0.3s_ease-out]"
+                )}
                 onClick={(e) => e.stopPropagation()}
                 draggable={false}
               />
@@ -271,6 +268,30 @@ export const CabinSection = () => {
           </div>
         </div>
       )}
+      
+      <style>{`
+        @keyframes slideInLeft {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </section>
   );
 };

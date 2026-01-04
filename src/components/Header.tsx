@@ -61,9 +61,9 @@ export const Header = () => {
   const navLinks = [
     { href: '#cabin', label: t.nav.cabin, isHash: true },
     { href: '#seasons', label: t.nav.seasons, isHash: true },
+    { href: '#pricing', label: language === 'sv' ? 'Priser' : language === 'de' ? 'Preise' : 'Pricing', isHash: true },
     { href: '#inventory', label: language === 'sv' ? 'Inventarier' : language === 'de' ? 'Ausstattung' : 'Equipment', isHash: true },
     { href: '#location', label: language === 'sv' ? 'Hitta hit' : language === 'de' ? 'Anfahrt' : 'Location', isHash: true },
-    { href: '#pricing', label: language === 'sv' ? 'Priser' : language === 'de' ? 'Preise' : 'Pricing', isHash: true },
     { href: '#contact', label: t.nav.contact, isHash: true },
     { href: '/villkor', label: language === 'sv' ? 'Bokningsvillkor' : language === 'de' ? 'Buchungsbedingungen' : 'Booking Terms', isHash: false },
   ];
