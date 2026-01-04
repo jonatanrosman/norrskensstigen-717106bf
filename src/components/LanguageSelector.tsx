@@ -46,7 +46,7 @@ export const LanguageSelector = ({ variant = 'default', className }: LanguageSel
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all duration-300",
             language === lang.code
-              ? "bg-primary text-primary-foreground shadow-sm"
+              ? "bg-[#6F1024] text-primary-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground hover:bg-muted"
           )}
           aria-label={lang.label}

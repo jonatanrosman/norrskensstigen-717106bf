@@ -179,7 +179,7 @@ export const SeasonsSection = () => {
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300",
               isActive
-                ? "bg-primary text-primary-foreground shadow-elevated scale-105"
+                ? "bg-[#6F1024] text-primary-foreground shadow-elevated scale-105"
                 : "bg-background text-muted-foreground hover:bg-muted hover:text-foreground shadow-soft"
             )}
           >
@@ -192,7 +192,7 @@ export const SeasonsSection = () => {
   );
 
   return (
-    <section ref={sectionRef} id="seasons" className="py-24 md:py-32 bg-card relative overflow-hidden">
+    <section ref={sectionRef} id="seasons" className="py-24 md:py-32 bg-secondary relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary rounded-full blur-[200px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent rounded-full blur-[150px]" />
@@ -237,7 +237,7 @@ export const SeasonsSection = () => {
               <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground min-h-[60px]">
                 {currentSeason.title}
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed min-h-[120px]">
+              <p className="text-lg text-muted-foreground leading-relaxed min-h-[150px] md:min-h-[120px]">
                 {currentSeason.description}
               </p>
 
@@ -270,7 +270,7 @@ export const SeasonsSection = () => {
       {/* Lightbox with carousel-style slide animation */}
       {lightboxOpen && (
         <div 
-          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center touch-none"
           onClick={closeLightbox}
         >
           <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur flex items-center justify-center">
@@ -285,7 +285,7 @@ export const SeasonsSection = () => {
           
           {/* Swipeable carousel container */}
           <div 
-            className="relative w-full h-full flex items-center justify-center overflow-hidden"
+            className="relative w-full h-full flex items-center justify-center overflow-hidden touch-pan-y"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}

@@ -114,6 +114,7 @@ export const Header = () => {
               <Link
                 key={link.href}
                 to={link.href}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className={cn(
                   "text-sm font-medium transition-all duration-300 hover:opacity-100 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full",
                   isScrolled
@@ -176,7 +177,10 @@ export const Header = () => {
               <Link
                 key={link.href}
                 to={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                 className="text-foreground py-3 px-4 rounded-lg hover:bg-muted transition-colors font-medium"
               >
                 {link.label}

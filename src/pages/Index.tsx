@@ -25,13 +25,13 @@ const Index = () => {
             <SeasonsSection />
           </div>
           <div className="bg-background">
-            <InventorySection />
+            <PricingSection />
           </div>
           <div className="bg-secondary">
-            <LocationSection />
+            <InventorySection />
           </div>
           <div className="bg-background">
-            <PricingSection />
+            <LocationSection />
           </div>
           <div className="bg-secondary">
             <ContactForm />

@@ -193,7 +193,7 @@ export const CabinSection = () => {
       {/* Fullscreen Lightbox with translucent white background */}
       {selectedImage !== null && (
         <div 
-          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center touch-none"
           onClick={() => setSelectedImage(null)}
         >
           {/* Close button */}
@@ -222,7 +222,7 @@ export const CabinSection = () => {
 
           {/* Swipeable image container */}
           <div 
-            className="w-full h-full flex items-center justify-center overflow-hidden"
+            className="w-full h-full flex items-center justify-center overflow-hidden touch-pan-y"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
