@@ -38,7 +38,7 @@ export const LanguageSelector = ({ variant = 'default', className }: LanguageSel
   }
 
   return (
-    <div className={cn("flex items-center gap-2 bg-card/80 backdrop-blur-sm rounded-full px-2 py-1 shadow-soft", className)}>
+    <div className={cn("inline-flex items-center gap-2 bg-card/80 backdrop-blur-sm rounded-full px-3 py-1 shadow-soft", className)}>
       {languages.map((lang) => (
         <button
           key={lang.code}

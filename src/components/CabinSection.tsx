@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   Mountain, Flame, ThermometerSun, Wifi, Tv, Gamepad2, 
@@ -51,7 +51,9 @@ export const CabinSection = () => {
   const { t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [currentTranslate, setCurrentTranslate] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const stats = [
     { icon: Bed, value: '10+2', label: t.cabin.beds },
@@ -85,30 +87,48 @@ export const CabinSection = () => {
     }
   }, [selectedImage]);
 
-  // Touch handlers for swipe
+  // Touch handlers for carousel-like swipe
   const minSwipeDistance = 50;
 
   const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
+    setCurrentTranslate(0);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    if (!touchStart || !isDragging) return;
+    const currentPosition = e.targetTouches[0].clientX;
+    const diff = currentPosition - touchStart;
+    setCurrentTranslate(diff);
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > minSwipeDistance;
-    const isRightSwipe = distance < -minSwipeDistance;
+    setIsDragging(false);
     
-    if (isLeftSwipe) {
-      handleNextImage();
-    } else if (isRightSwipe) {
-      handlePrevImage();
+    if (Math.abs(currentTranslate) > minSwipeDistance) {
+      if (currentTranslate < 0) {
+        handleNextImage();
+      } else {
+        handlePrevImage();
+      }
     }
+    
+    setCurrentTranslate(0);
+    setTouchStart(null);
   };
+
+  // Prevent background scrolling when lightbox is open
+  useEffect(() => {
+    if (selectedImage !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedImage]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -220,20 +240,29 @@ export const CabinSection = () => {
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
           </button>
 
-          {/* Swipeable image container */}
+          {/* Swipeable carousel container */}
           <div 
-            className="w-full h-full flex items-center justify-center overflow-hidden touch-pan-y"
+            ref={containerRef}
+            className="w-full h-full flex items-center justify-center overflow-hidden"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <img
-              src={galleryImages[selectedImage].src}
-              alt={galleryImages[selectedImage].alt}
-              className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-elevated select-none"
-              onClick={(e) => e.stopPropagation()}
-              draggable={false}
-            />
+            <div 
+              className="flex items-center transition-transform duration-300 ease-out"
+              style={{ 
+                transform: `translateX(${currentTranslate}px)`,
+                transition: isDragging ? 'none' : 'transform 0.3s ease-out'
+              }}
+            >
+              <img
+                src={galleryImages[selectedImage].src}
+                alt={galleryImages[selectedImage].alt}
+                className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-elevated select-none"
+                onClick={(e) => e.stopPropagation()}
+                draggable={false}
+              />
+            </div>
           </div>
           
           {/* Image counter */}
