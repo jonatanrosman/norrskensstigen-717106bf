@@ -148,19 +148,19 @@ export const LocationSection = () => {
       {/* Lightbox */}
       {lightboxOpen && (
         <div 
-          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center"
+          className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center touch-none"
           onClick={() => setLightboxOpen(false)}
         >
           <button
             onClick={() => setLightboxOpen(false)}
-            className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground transition-colors z-10"
+            className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground transition-colors z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur flex items-center justify-center"
           >
-            <X className="w-8 h-8" />
+            <X className="w-6 h-6" />
           </button>
           <img
             src={skiSlopeMap}
             alt="Ski slope map showing Norrskensstigen 12A location"
-            className="max-h-[95vh] max-w-[95vw] object-contain"
+            className="max-h-[95vh] max-w-[95vw] object-contain rounded-lg shadow-elevated"
             onClick={(e) => e.stopPropagation()}
           />
         </div>

@@ -8,7 +8,7 @@ const winterPricing = [
   { week: 1, dates: '27/12 2025 - 3/1 2026', price: '28 395 kr', status: 'Bokad' },
   { week: 2, dates: '3/1 - 10/1 2026', price: '13 595 kr', status: 'Bokad' },
   { week: 3, dates: '10/1 - 17/1 2026', price: '13 595 kr', status: 'Bokad' },
-  { week: 4, dates: '17/1 - 24/1 2026', price: '9 900 kr', originalPrice: '15 000 kr', status: 'Ledig' },
+  { week: 4, dates: '17/1 - 24/1 2026', price: '9 900 kr', status: 'Bokad' },
   { week: 5, dates: '24/1 - 31/1 2026', price: '16 395 kr', status: 'Bokad' },
   { week: 6, dates: '31/1 - 7/2 2026', price: '17 000 kr', status: 'Bokad' },
   { week: 7, dates: '7/2 - 14/2 2026', price: '27 495 kr', status: 'Bokad' },
@@ -37,7 +37,7 @@ export const PricingSection = () => {
   return (
     <section id="pricing" className="py-24 md:py-32 bg-gradient-frost">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
               {sectionTitle}
@@ -73,14 +73,7 @@ export const PricingSection = () => {
                           </div>
                         </td>
                         <td className="py-2 text-right">
-                          {row.originalPrice ? (
-                            <div className="flex flex-col items-end">
-                              <span className="text-xs text-muted-foreground line-through">{row.originalPrice}</span>
-                              <span className="font-semibold text-green-600 dark:text-green-500">{row.price}</span>
-                            </div>
-                          ) : (
-                            <span className="font-medium text-foreground">{row.price}</span>
-                          )}
+                          <span className="font-medium text-foreground">{row.price}</span>
                         </td>
                         <td className="py-2 text-right">
                           <span
