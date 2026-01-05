@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import { 
-  Mountain, Flame, ThermometerSun, Wifi, Tv, Gamepad2, 
+  Mountain, Flame, ThermometerSun, Wifi, Tv, Plug, 
   WashingMachine, Droplets, Wind, Bed, Bath, Home, SquareStack,
-  X, ChevronLeft, ChevronRight
+  X, ChevronLeft, ChevronRight, Snowflake
 } from 'lucide-react';
 
 // Import gallery images (18 total)
@@ -63,13 +63,13 @@ export const CabinSection = () => {
   ];
 
   const features = [
-    { icon: Mountain, label: t.cabin.features.skiInOut },
+    { icon: Snowflake, label: t.cabin.features.skiInOut },
     { icon: Mountain, label: t.cabin.features.mountainView },
     { icon: Flame, label: t.cabin.features.fireplace },
     { icon: ThermometerSun, label: t.cabin.features.floorHeating },
     { icon: Wifi, label: t.cabin.features.wifi },
     { icon: Tv, label: t.cabin.features.googleStreamer },
-    { icon: Gamepad2, label: t.cabin.features.gaming },
+    { icon: Plug, label: t.cabin.features.evCharger },
     { icon: WashingMachine, label: t.cabin.features.laundry },
     { icon: Droplets, label: t.cabin.features.sauna },
     { icon: Wind, label: t.cabin.features.drying },

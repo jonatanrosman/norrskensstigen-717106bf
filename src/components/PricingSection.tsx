@@ -17,7 +17,7 @@ const winterPricing = [
   { week: 10, dates: '28/2 - 7/3 2026', price: '22 000 kr', status: 'Bokad' },
   { week: 11, dates: '7/3 - 14/3 2026', price: '19 000 kr', status: 'Bokad' },
   { week: 12, dates: '14/3 - 21/3 2026', price: '19 000 kr', status: 'Bokad' },
-  { week: 13, dates: '21/3 - 28/3 2026', price: '17 000 kr', status: 'Ledig' },
+  { week: 13, dates: '21/3 - 28/3 2026', price: '17 000 kr', status: 'Bokad' },
   { week: 14, dates: '28/3 - 4/4 2026', price: '23 000 kr', status: 'Ledig' },
   { week: 15, dates: '4/4 - 11/4 2026', price: '23 000 kr', status: 'Ledig' },
   { week: 16, dates: '11/4 - 19/4 2026', price: '13 000 kr', status: 'Ledig', note: '8 nätter' },
