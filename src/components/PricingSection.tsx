@@ -3,24 +3,24 @@ import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const winterPricing = [
-  { week: 51, dates: '13/12 - 20/12 2025', price: '8 500 kr', status: 'Bokad' },
-  { week: 52, dates: '20/12 - 27/12 2025', price: '27 000 kr', status: 'Bokad' },
-  { week: 1, dates: '27/12 2025 - 3/1 2026', price: '28 395 kr', status: 'Bokad' },
-  { week: 2, dates: '3/1 - 10/1 2026', price: '13 595 kr', status: 'Bokad' },
-  { week: 3, dates: '10/1 - 17/1 2026', price: '13 595 kr', status: 'Bokad' },
-  { week: 4, dates: '17/1 - 24/1 2026', price: '9 900 kr', status: 'Bokad' },
-  { week: 5, dates: '24/1 - 31/1 2026', price: '16 395 kr', status: 'Bokad' },
-  { week: 6, dates: '31/1 - 7/2 2026', price: '17 000 kr', status: 'Bokad' },
-  { week: 7, dates: '7/2 - 14/2 2026', price: '27 495 kr', status: 'Bokad' },
-  { week: 8, dates: '14/2 - 21/2 2026', price: '27 495 kr', status: 'Bokad' },
-  { week: 9, dates: '21/2 - 28/2 2026', price: '27 495 kr', status: 'Bokad' },
-  { week: 10, dates: '28/2 - 7/3 2026', price: '22 000 kr', status: 'Bokad' },
-  { week: 11, dates: '7/3 - 14/3 2026', price: '19 000 kr', status: 'Bokad' },
-  { week: 12, dates: '14/3 - 21/3 2026', price: '19 000 kr', status: 'Bokad' },
-  { week: 13, dates: '21/3 - 28/3 2026', price: '17 000 kr', status: 'Bokad' },
-  { week: 14, dates: '28/3 - 4/4 2026', price: '23 000 kr', status: 'Ledig' },
-  { week: 15, dates: '4/4 - 11/4 2026', price: '23 000 kr', status: 'Ledig' },
-  { week: 16, dates: '11/4 - 19/4 2026', price: '13 000 kr', status: 'Ledig', note: '8 nätter' },
+  { week: 51, dates: '13/12 - 20/12 2025', priceKr: '8 500 kr', priceSek: '8 500 SEK', status: 'Bokad' },
+  { week: 52, dates: '20/12 - 27/12 2025', priceKr: '27 000 kr', priceSek: '27 000 SEK', status: 'Bokad' },
+  { week: 1, dates: '27/12 2025 - 3/1 2026', priceKr: '28 395 kr', priceSek: '28 395 SEK', status: 'Bokad' },
+  { week: 2, dates: '3/1 - 10/1 2026', priceKr: '13 595 kr', priceSek: '13 595 SEK', status: 'Bokad' },
+  { week: 3, dates: '10/1 - 17/1 2026', priceKr: '13 595 kr', priceSek: '13 595 SEK', status: 'Bokad' },
+  { week: 4, dates: '17/1 - 24/1 2026', priceKr: '9 900 kr', priceSek: '9 900 SEK', status: 'Bokad' },
+  { week: 5, dates: '24/1 - 31/1 2026', priceKr: '16 395 kr', priceSek: '16 395 SEK', status: 'Bokad' },
+  { week: 6, dates: '31/1 - 7/2 2026', priceKr: '17 000 kr', priceSek: '17 000 SEK', status: 'Bokad' },
+  { week: 7, dates: '7/2 - 14/2 2026', priceKr: '27 495 kr', priceSek: '27 495 SEK', status: 'Bokad' },
+  { week: 8, dates: '14/2 - 21/2 2026', priceKr: '27 495 kr', priceSek: '27 495 SEK', status: 'Bokad' },
+  { week: 9, dates: '21/2 - 28/2 2026', priceKr: '27 495 kr', priceSek: '27 495 SEK', status: 'Bokad' },
+  { week: 10, dates: '28/2 - 7/3 2026', priceKr: '22 000 kr', priceSek: '22 000 SEK', status: 'Bokad' },
+  { week: 11, dates: '7/3 - 14/3 2026', priceKr: '19 000 kr', priceSek: '19 000 SEK', status: 'Bokad' },
+  { week: 12, dates: '14/3 - 21/3 2026', priceKr: '19 000 kr', priceSek: '19 000 SEK', status: 'Bokad' },
+  { week: 13, dates: '21/3 - 28/3 2026', priceKr: '17 000 kr', priceSek: '17 000 SEK', status: 'Bokad' },
+  { week: 14, dates: '28/3 - 4/4 2026', priceKr: '23 000 kr', priceSek: '23 000 SEK', status: 'Ledig' },
+  { week: 15, dates: '4/4 - 11/4 2026', priceKr: '23 000 kr', priceSek: '23 000 SEK', status: 'Ledig' },
+  { week: 16, dates: '11/4 - 19/4 2026', priceKr: '13 000 kr', priceSek: '13 000 SEK', status: 'Ledig', note: '8 nätter' },
 ];
 
 export const PricingSection = () => {
@@ -57,9 +57,9 @@ export const PricingSection = () => {
                   <thead>
                     <tr className="border-b border-border">
                       <th className="text-left py-2 font-medium text-muted-foreground">{weekLabel}</th>
-                      <th className="text-left py-2 font-medium text-muted-foreground">Datum</th>
-                      <th className="text-right py-2 font-medium text-muted-foreground">Pris</th>
-                      <th className="text-right py-2 font-medium text-muted-foreground">Status</th>
+                      <th className="text-left py-2 font-medium text-muted-foreground">{language === 'sv' ? 'Datum' : language === 'de' ? 'Datum' : 'Date'}</th>
+                      <th className="text-right py-2 font-medium text-muted-foreground">{language === 'sv' ? 'Pris' : language === 'de' ? 'Preis' : 'Price'}</th>
+                      <th className="text-right py-2 font-medium text-muted-foreground">{language === 'sv' ? 'Status' : language === 'de' ? 'Status' : 'Status'}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -73,7 +73,7 @@ export const PricingSection = () => {
                           </div>
                         </td>
                         <td className="py-2 text-right">
-                          <span className="font-medium text-foreground">{row.price}</span>
+                          <span className="font-medium text-foreground">{language === 'sv' ? row.priceKr : row.priceSek}</span>
                         </td>
                         <td className="py-2 text-right">
                           <span

@@ -92,9 +92,9 @@ export const SeasonsSection = () => {
     ? winterGalleryImages 
     : summerGalleryImages;
 
-  const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; label: string }[] = [
-    { id: 'winter', icon: Snowflake, label: language === 'sv' ? 'Vinter' : language === 'de' ? 'Winter' : 'Winter' },
-    { id: 'summer', icon: Sun, label: language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn' },
+  const seasons: { id: Season; icon: React.ComponentType<{ className?: string }>; label: string; mobileLabel: string }[] = [
+    { id: 'winter', icon: Snowflake, label: language === 'sv' ? 'Vinter' : language === 'de' ? 'Winter' : 'Winter', mobileLabel: language === 'sv' ? 'Vinter' : language === 'de' ? 'Winter' : 'Winter' },
+    { id: 'summer', icon: Sun, label: language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn', mobileLabel: language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'das Sommerhalbjahr' : 'Summer' },
   ];
 
   const currentSeason = t.seasons[activeSeason];
@@ -184,7 +184,8 @@ export const SeasonsSection = () => {
             )}
           >
             <Icon className={cn("w-5 h-5", isActive && "animate-pulse")} />
-            <span>{season.label}</span>
+            <span className="hidden md:inline">{season.label}</span>
+            <span className="md:hidden">{season.mobileLabel}</span>
           </button>
         );
       })}
