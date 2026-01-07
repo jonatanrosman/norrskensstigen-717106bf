@@ -129,7 +129,7 @@ export const InventorySection = () => {
       : 'Available at Norrskensstigen\u00A012A';
 
   const subtitle = language === 'sv'
-    ? 'Ett urval av det som oftast efterfrågas. Undrar ni om något specifikt finns,\u00A0maila info@norrskensstigen.se'
+    ? 'Ett urval av det som oftast efterfrågas. Undrar ni om något specifikt finns, maila info@norrskensstigen.se'
     : language === 'de'
       ? 'Eine Auswahl der am häufigsten nachgefragten Artikel. Bei spezifischen Fragen kontaktieren Sie info@norrskensstigen.se'
       : 'A selection of frequently requested items. For specific questions, email info@norrskensstigen.se';
