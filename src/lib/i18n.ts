@@ -45,13 +45,13 @@ export const translations = {
       winter: {
         name: 'Vinter',
         title: 'Sälens bästa skidåkning',
-        description: 'Stöten har Sälenfjällens högsta fallhöjd och blev utsedd till Årets Skidanläggning 2019. Med 47 pister, uppgraderad snöläggning och endast 15 minuter till Scandinavian Mountains Airport är detta den perfekta skidresan. Endast 40 minuter till Trysil för ännu mer skidåkning.',
-        highlights: ['Årets Skidanläggning 2019', 'Sveriges bästa pist 24/25', 'Ski\u2011in/Ski\u2011out', '15 min till flyget'],
+        description: 'Stöten har Sälenfjällens högsta fallhöjd och blev utsedd till Årets Skidanläggning 2019. Med 47 pister, uppgraderad snöläggning och endast 20 minuter till Scandinavian Mountains Airport är detta den perfekta skidresan. Endast 45 minuter till Trysil för ännu mer skidåkning.',
+        highlights: ['Årets Skidanläggning 2019', 'Sveriges bästa pist 24/25', 'Ski\u2011in/Ski\u2011out', '20 min till flyget'],
       },
       summer: {
         name: 'Vår, sommar & höst',
         title: 'Ett naturnära paradis',
-        description: 'Under vår, sommar och höst förvandlas Stöten till ett lugnt, naturnära paradis. Vandra på Södra Kungsleden till Stötenfjällets topp, cykla på flowy stigar i Rörbäcksnäs (20 min bort), eller fiska i kristallklara tjärnar. Plocka hjortron, blåbär och kantareller i fjällsidorna.',
+        description: 'Under vår, sommar och höst förvandlas Stöten till ett lugnt, naturnära paradis. Vandra på Södra Kungsleden till Stötenfjällets topp, cykla på flowy stigar i Rörbäcksnäs (20 min bort), eller fiska i kristallklara tjärnar. Plocka hjortron, blåbär och kantareller på fjällsidorna.',
         highlights: ['Södra Kungsleden', 'Mountainbike i Rörbäcksnäs', 'Fiske', 'Bär & svamp'],
       },
     },
@@ -187,8 +187,8 @@ export const translations = {
       winter: {
         name: 'Winter',
         title: "Sälen's best skiing",
-        description: "Stöten has the highest vertical drop in the Sälen mountains and was named Ski Resort of the Year 2019. With 47 slopes, upgraded snowmaking, and only 15 minutes to Scandinavian Mountains Airport, this is the perfect ski trip. Only 40 minutes to Trysil for even more skiing.",
-        highlights: ['Ski Resort of the Year 2019', "Sweden's Best Slope 24/25", 'Ski-in/Ski-out', '15 min to airport'],
+        description: "Stöten has the highest vertical drop in the Sälen mountains and was named Ski Resort of the Year 2019. With 47 slopes, upgraded snowmaking, and only 20 minutes to Scandinavian Mountains Airport, this is the perfect ski trip. Only 45 minutes to Trysil for even more skiing.",
+        highlights: ['Ski Resort of the Year 2019', "Sweden's Best Slope 24/25", 'Ski-in/Ski-out', '20 min to airport'],
       },
       summer: {
         name: 'Spring, Summer & Autumn',
@@ -329,8 +329,8 @@ export const translations = {
       winter: {
         name: 'Winter',
         title: 'Das beste Skifahren in Sälen',
-        description: 'Stöten hat den höchsten Höhenunterschied der Sälen-Berge und wurde 2019 zur Skianlage des Jahres gewählt. Mit 47 Pisten, verbesserter Beschneiung und nur 15 Minuten zum Scandinavian Mountains Airport ist dies der perfekte Skiurlaub. Nur 40 Minuten nach Trysil für noch mehr Skifahren.',
-        highlights: ['Skianlage des Jahres 2019', 'Schwedens beste Piste 24/25', 'Ski-in/Ski-out', '15 Min. zum Flughafen'],
+        description: 'Stöten hat den höchsten Höhenunterschied der Sälen-Berge und wurde 2019 zur Skianlage des Jahres gewählt. Mit 47 Pisten, verbesserter Beschneiung und nur 20 Minuten zum Scandinavian Mountains Airport ist dies der perfekte Skiurlaub. Nur 45 Minuten nach Trysil für noch mehr Skifahren.',
+        highlights: ['Skianlage des Jahres 2019', 'Schwedens beste Piste 24/25', 'Ski-in/Ski-out', '20 Min. zum Flughafen'],
       },
       summer: {
         name: 'Frühling, Sommer & Herbst',

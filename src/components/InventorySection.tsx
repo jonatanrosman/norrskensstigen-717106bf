@@ -79,7 +79,7 @@ const inventoryData: InventoryCategory[] = [
     items: [
       { sv: 'Laddbox till elbil', en: 'EV charging station', de: 'E-Auto Ladestation' },
       { sv: 'Termos', en: 'Thermos', de: 'Thermoskanne' },
-      { sv: 'Utflyktsmugg', en: 'Travel mug', de: 'Reisebecher' },
+      { sv: 'Utflyktsmugg', en: 'Plastic mugs', de: 'Reisebecher' },
       { sv: 'Champagneglas i plast', en: 'Plastic champagne glasses', de: 'Plastik-Champagnergläser' },
       { sv: 'Dubbla bänkbord på altanen', en: 'Double picnic tables on terrace', de: 'Doppelte Picknicktische auf der Terrasse' },
       { sv: 'Bänk på balkongen', en: 'Bench on balcony', de: 'Bank auf dem Balkon' },
@@ -129,7 +129,7 @@ export const InventorySection = () => {
       : 'Available at Norrskensstigen\u00A012A';
 
   const subtitle = language === 'sv'
-    ? 'Ett urval av det som oftast efterfrågas. Undrar ni om något specifikt finns, maila info@norrskensstigen.se'
+    ? 'Ett urval av det som oftast efterfrågas. Undrar ni om något specifikt finns,\u00A0maila info@norrskensstigen.se'
     : language === 'de'
       ? 'Eine Auswahl der am häufigsten nachgefragten Artikel. Bei spezifischen Fragen kontaktieren Sie info@norrskensstigen.se'
       : 'A selection of frequently requested items. For specific questions, email info@norrskensstigen.se';
