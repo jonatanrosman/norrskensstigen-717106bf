@@ -103,17 +103,17 @@ export const translations = {
       payment: {
         title: 'Betalning',
         items: [
-          'I samband med bokning betalas en bokningsavgift om 800:-',
+          'I samband med bokning betalas en handpenning om 800:-',
           'Senast 45 dagar innan vistelsens start betalas resterande belopp.',
         ],
       },
       cancellation: {
         title: 'Avbokning',
         items: [
-          'Avbokning senast 45 dagar innan vistelsens start är kostnadsfri. Dock återbetalas ej bokningsavgiften.',
-          'Avbokning senast 30 dagar innan vistelsens början innebär att vi återbetalar 50% av din summa (minus bokningsavgift).',
+          'Avbokning senast 45 dagar innan vistelsens start är kostnadsfri. Dock återbetalas ej handpenningen.',
+          'Avbokning senast 30 dagar innan vistelsens början innebär att vi återbetalar 50% av din summa (minus handpenning).',
           'Avbokning senare än 30 dagar innan vistelsens början innebär att ingen återbetalning sker.',
-          'Vi kommer vid en avbokning alltid att försöka hyra ut stugan på nytt. Får vi stugan uthyrd kommer vi att återbetala ett belopp till dig motsvarande det nya hyreskontraktets värde (dock maximalt vad du själv betalt) minus bokningsavgiften 800:- samt en administrativ avgift om 500:-',
+          'Vi kommer vid en avbokning alltid att försöka hyra ut stugan på nytt. Får vi stugan uthyrd kommer vi att återbetala ett belopp till dig motsvarande det nya hyreskontraktets värde (dock maximalt vad du själv betalt) minus handpenningen 800:- samt en administrativ avgift om 500:-',
           'Avbokning måste ske skriftligt.',
         ],
       },
