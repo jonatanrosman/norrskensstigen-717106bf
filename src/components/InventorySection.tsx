@@ -29,6 +29,7 @@ const inventoryData: InventoryCategory[] = [
       { sv: 'Induktionshäll', en: 'Induction cooktop', de: 'Induktionskochfeld' },
       { sv: 'Kastruller (5L x2, 3L, 1L)', en: 'Pots (5L x2, 3L, 1L)', de: 'Töpfe (5L x2, 3L, 1L)' },
       { sv: 'Stekpannor (28cm x2)', en: 'Frying pans (28cm x2)', de: 'Bratpfannen (28cm x2)' },
+      { sv: 'Nespresso kapselmaskin (original-kapslar)', en: 'Nespresso capsule machine (original capsules)', de: 'Nespresso Kapselmaschine (Original-Kapseln)' },
       { sv: 'Kaffebryggare', en: 'Coffee maker', de: 'Kaffeemaschine' },
       { sv: 'Vattenkokare', en: 'Electric kettle', de: 'Wasserkocher' },
       { sv: 'Dubbel brödrost', en: 'Double toaster', de: 'Doppeltoaster' },
