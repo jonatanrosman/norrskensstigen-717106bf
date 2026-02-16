@@ -31,7 +31,7 @@ export const translations = {
         skiInOut: 'Ski\u2011in/Ski\u2011out',
         mountainView: 'Fjällutsikt',
         fireplace: 'Braskamin',
-        floorHeating: 'Golvvärme',
+        floorHeating: 'Värmepump',
         wifi: 'Snabbt Wi-Fi',
         googleStreamer: 'Google Streamer',
         evCharger: 'Elbilsladdare',
