@@ -86,9 +86,31 @@ Detta meddelande skickades via kontaktformuläret på norrskensstigen.se
     return res.status(200).json({ success: true, data });
   } catch (error) {
     console.error('Error sending email:', error);
+    
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+    // Call fallback edge function to notify owner and store the submission
+    try {
+      const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://vjayjkppavzchbhavznh.supabase.co';
+      await fetch(`${supabaseUrl}/functions/v1/notify-form-error`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: req.body?.name,
+          email: req.body?.email,
+          phone: req.body?.phone,
+          message: req.body?.message,
+          checkInDate: req.body?.checkInDate,
+          errorReason: errorMessage,
+        }),
+      });
+    } catch (fallbackError) {
+      console.error('Fallback notification also failed:', fallbackError);
+    }
+
     return res.status(500).json({ 
       error: 'Failed to send email',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: errorMessage
     });
   }
 }
