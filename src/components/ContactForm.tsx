@@ -130,7 +130,11 @@ export const ContactForm = () => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to send email');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const detail = errorData.details || errorData.error || '';
+        throw new Error(detail || 'Failed to send email');
+      }
 
       toast({ 
         title: language === 'sv' ? 'Meddelandet skickat!' : language === 'de' ? 'Nachricht gesendet!' : 'Message sent!',
@@ -141,9 +145,18 @@ export const ContactForm = () => {
       setCheckInDate(undefined);
     } catch (error) {
       console.error('Error sending email:', error);
+      const errorDetail = error instanceof Error ? error.message : '';
+      const fallbackMsg = language === 'sv' 
+        ? 'Vänligen försök igen eller kontakta oss direkt på info@norrskensstigen.se' 
+        : language === 'de' 
+        ? 'Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt unter info@norrskensstigen.se' 
+        : 'Please try again or contact us directly at info@norrskensstigen.se';
+      
       toast({ 
         title: language === 'sv' ? 'Något gick fel' : language === 'de' ? 'Etwas ist schief gelaufen' : 'Something went wrong',
-        description: language === 'sv' ? 'Vänligen försök igen eller kontakta oss direkt på info@norrskensstigen.se' : language === 'de' ? 'Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt unter info@norrskensstigen.se' : 'Please try again or contact us directly at info@norrskensstigen.se',
+        description: errorDetail 
+          ? `${errorDetail}. ${fallbackMsg}` 
+          : fallbackMsg,
         variant: 'destructive'
       });
     } finally {
