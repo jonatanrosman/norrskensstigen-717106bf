@@ -19,8 +19,8 @@ const winterPricing = [
   { week: 12, dates: '14/3 - 21/3 2026', priceKr: '19 000 kr', priceSek: '19 000 SEK', status: 'Bokad' },
   { week: 13, dates: '21/3 - 28/3 2026', priceKr: '17 000 kr', priceSek: '17 000 SEK', status: 'Bokad' },
   { week: 14, dates: '28/3 - 4/4 2026', priceKr: '23 000 kr', priceSek: '23 000 SEK', status: 'Bokad' },
-  { week: 15, dates: '4/4 - 11/4 2026', priceKr: '18 400 kr', priceSek: '18 400 SEK', originalPriceKr: '23 000 kr', originalPriceSek: '23 000 SEK', status: 'Ledig' },
-  { week: 16, dates: '11/4 - 19/4 2026', priceKr: '10 400 kr', priceSek: '10 400 SEK', originalPriceKr: '13 000 kr', originalPriceSek: '13 000 SEK', status: 'Ledig', note: '8 nätter' },
+  { week: 15, dates: '4/4 - 11/4 2026', priceKr: '16 100 kr', priceSek: '16 100 SEK', originalPriceKr: '23 000 kr', originalPriceSek: '23 000 SEK', status: 'Ledig' },
+  { week: 16, dates: '11/4 - 19/4 2026', priceKr: '9 100 kr', priceSek: '9 100 SEK', originalPriceKr: '13 000 kr', originalPriceSek: '13 000 SEK', status: 'Ledig', note: '8 nätter' },
 ];
 
 export const PricingSection = () => {
@@ -75,7 +75,7 @@ export const PricingSection = () => {
                         <td className="py-2 text-right">
                           {row.originalPriceKr && (
                             <div className="text-xs text-muted-foreground">
-                              <span className="text-green-600 font-medium">20% </span>
+                              <span className="text-green-600 font-medium">30% </span>
                               <span className="line-through">{language === 'sv' ? row.originalPriceKr : row.originalPriceSek}</span>
                             </div>
                           )}
