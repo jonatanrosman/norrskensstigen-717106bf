@@ -3,30 +3,30 @@ import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const winterPricing = [
-  { week: 51, dates: '13/12 - 20/12 2025', priceKr: '8 500 kr', priceSek: '8 500 SEK', status: 'Bokad' },
-  { week: 52, dates: '20/12 - 27/12 2025', priceKr: '27 000 kr', priceSek: '27 000 SEK', status: 'Bokad' },
-  { week: 1, dates: '27/12 2025 - 3/1 2026', priceKr: '28 395 kr', priceSek: '28 395 SEK', status: 'Bokad' },
-  { week: 2, dates: '3/1 - 10/1 2026', priceKr: '13 595 kr', priceSek: '13 595 SEK', status: 'Bokad' },
-  { week: 3, dates: '10/1 - 17/1 2026', priceKr: '13 595 kr', priceSek: '13 595 SEK', status: 'Bokad' },
-  { week: 4, dates: '17/1 - 24/1 2026', priceKr: '15 000 kr', priceSek: '15 000 SEK', status: 'Bokad' },
-  { week: 5, dates: '24/1 - 31/1 2026', priceKr: '16 395 kr', priceSek: '16 395 SEK', status: 'Bokad' },
-  { week: 6, dates: '31/1 - 7/2 2026', priceKr: '17 000 kr', priceSek: '17 000 SEK', status: 'Bokad' },
-  { week: 7, dates: '7/2 - 14/2 2026', priceKr: '27 495 kr', priceSek: '27 495 SEK', status: 'Bokad' },
-  { week: 8, dates: '14/2 - 21/2 2026', priceKr: '27 495 kr', priceSek: '27 495 SEK', status: 'Bokad' },
-  { week: 9, dates: '21/2 - 28/2 2026', priceKr: '27 495 kr', priceSek: '27 495 SEK', status: 'Bokad' },
-  { week: 10, dates: '28/2 - 7/3 2026', priceKr: '22 000 kr', priceSek: '22 000 SEK', status: 'Bokad' },
-  { week: 11, dates: '7/3 - 14/3 2026', priceKr: '19 000 kr', priceSek: '19 000 SEK', status: 'Bokad' },
-  { week: 12, dates: '14/3 - 21/3 2026', priceKr: '19 000 kr', priceSek: '19 000 SEK', status: 'Bokad' },
-  { week: 13, dates: '21/3 - 28/3 2026', priceKr: '17 000 kr', priceSek: '17 000 SEK', status: 'Bokad' },
-  { week: 14, dates: '28/3 - 4/4 2026', priceKr: '23 000 kr', priceSek: '23 000 SEK', status: 'Bokad' },
-  { week: 15, dates: '4/4 - 11/4 2026', priceKr: '23 000 kr', priceSek: '23 000 SEK', status: 'Bokad' },
-  { week: 16, dates: '11/4 - 19/4 2026', priceKr: '9 100 kr', priceSek: '9 100 SEK', originalPriceKr: '13 000 kr', originalPriceSek: '13 000 SEK', status: 'Ledig', note: '8 nätter' },
+  { week: 50, dates: '5/12 - 12/12 2026', priceKr: '5 000 kr', priceSek: '5 000 SEK', status: 'Ledig', note: 'Grand opening' },
+  { week: 51, dates: '12/12 - 19/12 2026', priceKr: '9 000 kr', priceSek: '9 000 SEK', status: 'Ledig' },
+  { week: 52, dates: '19/12 - 26/12 2026', priceKr: '27 500 kr', priceSek: '27 500 SEK', status: 'Ledig', note: 'Julveckan' },
+  { week: 53, dates: '26/12 2026 - 2/1 2027', priceKr: '29 000 kr', priceSek: '29 000 SEK', status: 'Ledig', note: 'Nyårsveckan' },
+  { week: 1, dates: '2/1 - 9/1 2027', priceKr: '13 795 kr', priceSek: '13 795 SEK', status: 'Bokad' },
+  { week: 2, dates: '9/1 - 16/1 2027', priceKr: '10 095 kr', priceSek: '10 095 SEK', status: 'Bokad' },
+  { week: 3, dates: '16/1 - 23/1 2027', priceKr: '11 000 kr', priceSek: '11 000 SEK', status: 'Ledig' },
+  { week: 4, dates: '23/1 - 30/1 2027', priceKr: '15 500 kr', priceSek: '15 500 SEK', status: 'Ledig' },
+  { week: 5, dates: '30/1 - 6/2 2027', priceKr: '17 500 kr', priceSek: '17 500 SEK', status: 'Bokad' },
+  { week: 6, dates: '6/2 - 13/2 2027', priceKr: '19 500 kr', priceSek: '19 500 SEK', status: 'Bokad' },
+  { week: 7, dates: '13/2 - 20/2 2027', priceKr: '28 000 kr', priceSek: '28 000 SEK', status: 'Ledig', note: 'Sportlov' },
+  { week: 8, dates: '20/2 - 27/2 2027', priceKr: '28 000 kr', priceSek: '28 000 SEK', status: 'Ledig', note: 'Sportlov' },
+  { week: 9, dates: '27/2 - 6/3 2027', priceKr: '28 000 kr', priceSek: '28 000 SEK', status: 'Ledig', note: 'Sportlov' },
+  { week: 10, dates: '6/3 - 13/3 2027', priceKr: '21 000 kr', priceSek: '21 000 SEK', status: 'Ledig', note: 'Sportlov' },
+  { week: 11, dates: '13/3 - 20/3 2027', priceKr: '19 500 kr', priceSek: '19 500 SEK', status: 'Bokad' },
+  { week: 12, dates: '20/3 - 27/3 2027', priceKr: '23 500 kr', priceSek: '23 500 SEK', status: 'Ledig', note: 'Påsk' },
+  { week: 13, dates: '27/3 - 3/4 2027', priceKr: '23 500 kr', priceSek: '23 500 SEK', status: 'Ledig', note: 'Påsk' },
+  { week: 14, dates: '3/4 - 11/4 2027', priceKr: '14 000 kr', priceSek: '14 000 SEK', status: 'Ledig' },
 ];
 
 export const PricingSection = () => {
   const { language } = useLanguage();
 
-  const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2025/2026' : language === 'de' ? 'Preise Wintersaison 2025/2026' : 'Winter Season 2025/2026 Pricing';
+  const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2026/2027' : language === 'de' ? 'Preise Wintersaison 2026/2027' : 'Winter Season 2026/2027 Pricing';
   const summerPricingTitle = language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn';
   const cleaningIncluded = language === 'sv' ? 'Slutstädning är inkluderat i priset.' : language === 'de' ? 'Endreinigung ist im Preis inbegriffen.' : 'Final cleaning is included in the price.';
   const weekLabel = language === 'sv' ? 'Vecka' : language === 'de' ? 'Woche' : 'Week';
@@ -73,12 +73,6 @@ export const PricingSection = () => {
                           </div>
                         </td>
                         <td className="py-2 text-right">
-                          {row.originalPriceKr && (
-                            <div className="text-xs text-muted-foreground">
-                              <span className="text-green-600 font-medium">30% </span>
-                              <span className="line-through">{language === 'sv' ? row.originalPriceKr : row.originalPriceSek}</span>
-                            </div>
-                          )}
                           <span className="font-medium text-foreground">{language === 'sv' ? row.priceKr : row.priceSek}</span>
                         </td>
                         <td className="py-2 text-right">
