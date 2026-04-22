@@ -3,7 +3,7 @@ import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const winterPricing = [
-  { week: 50, dates: '5/12 - 12/12 2026', priceKr: '5 000 kr', priceSek: '5 000 SEK', status: 'Ledig', note: 'Grand opening' },
+  { week: 50, dates: '5/12 - 12/12 2026', priceKr: '6 500 kr', priceSek: '6 500 SEK', status: 'Ledig', note: 'Grand opening' },
   { week: 51, dates: '12/12 - 19/12 2026', priceKr: '9 000 kr', priceSek: '9 000 SEK', status: 'Ledig' },
   { week: 52, dates: '19/12 - 26/12 2026', priceKr: '27 500 kr', priceSek: '27 500 SEK', status: 'Ledig', note: 'Julveckan' },
   { week: 53, dates: '26/12 2026 - 2/1 2027', priceKr: '29 000 kr', priceSek: '29 000 SEK', status: 'Ledig', note: 'Nyårsveckan' },
