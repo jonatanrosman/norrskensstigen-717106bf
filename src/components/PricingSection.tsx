@@ -26,7 +26,7 @@ const winterPricing = [
 export const PricingSection = () => {
   const { language } = useLanguage();
 
-  const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2025/2026' : language === 'de' ? 'Preise Wintersaison 2025/2026' : 'Winter Season 2025/2026 Pricing';
+  const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2026/2027' : language === 'de' ? 'Preise Wintersaison 2026/2027' : 'Winter Season 2026/2027 Pricing';
   const summerPricingTitle = language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn';
   const cleaningIncluded = language === 'sv' ? 'Slutstädning är inkluderat i priset.' : language === 'de' ? 'Endreinigung ist im Preis inbegriffen.' : 'Final cleaning is included in the price.';
   const weekLabel = language === 'sv' ? 'Vecka' : language === 'de' ? 'Woche' : 'Week';
