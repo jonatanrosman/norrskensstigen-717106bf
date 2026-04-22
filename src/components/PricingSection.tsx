@@ -73,12 +73,6 @@ export const PricingSection = () => {
                           </div>
                         </td>
                         <td className="py-2 text-right">
-                          {row.originalPriceKr && (
-                            <div className="text-xs text-muted-foreground">
-                              <span className="text-green-600 font-medium">30% </span>
-                              <span className="line-through">{language === 'sv' ? row.originalPriceKr : row.originalPriceSek}</span>
-                            </div>
-                          )}
                           <span className="font-medium text-foreground">{language === 'sv' ? row.priceKr : row.priceSek}</span>
                         </td>
                         <td className="py-2 text-right">
