@@ -28,24 +28,24 @@ import interior17 from '@/assets/interior/interior-17.jpg';
 import interior18 from '@/assets/interior/interior-18.jpg';
 
 const galleryImages = [
-  { src: interior1, alt: 'Vardagsrum med högt i tak' },
-  { src: interior2, alt: 'Braskamin' },
-  { src: interior3, alt: 'Bastu' },
-  { src: interior4, alt: 'Kök och vardagsrum' },
-  { src: interior5, alt: 'Matplats och kök' },
-  { src: interior6, alt: 'Matplats med trappa' },
-  { src: interior7, alt: 'Trappa och fönster' },
-  { src: interior8, alt: 'Övre våning med utsikt' },
-  { src: interior9, alt: 'Allrum med balkong' },
-  { src: interior10, alt: 'Sovrum' },
-  { src: interior11, alt: 'Sovrum med våningssängar' },
-  { src: interior12, alt: 'Badrum' },
-  { src: interior13, alt: 'Hall och entré' },
-  { src: interior14, alt: 'Tvättstuga med bastu' },
-  { src: interior15, alt: 'Dusch' },
-  { src: interior16, alt: 'Planritning' },
-  { src: interior17, alt: 'Entréplan 3D' },
-  { src: interior18, alt: 'Ovanvåning 3D' },
+  { src: interior1, alt: 'Rymligt vardagsrum med högt i tak' },
+  { src: interior2, alt: 'Mysig braskamin i vardagsrummet' },
+  { src: interior3, alt: 'Vedeldad bastu med fönster' },
+  { src: interior4, alt: 'Öppet kök och vardagsrum i lodgestil' },
+  { src: interior5, alt: 'Matplats intill köket' },
+  { src: interior6, alt: 'Matplats med trappa till övervåningen' },
+  { src: interior7, alt: 'Trappa och stora fönster mot fjällen' },
+  { src: interior8, alt: 'Övre våning med fjällutsikt' },
+  { src: interior9, alt: 'Allrum med utgång till balkong' },
+  { src: interior10, alt: 'Sovrum med dubbelsäng' },
+  { src: interior11, alt: 'Sovrum med våningssängar för barn' },
+  { src: interior12, alt: 'Modernt badrum med dusch' },
+  { src: interior13, alt: 'Hall och entré med förvaring' },
+  { src: interior14, alt: 'Tvättstuga intill bastun' },
+  { src: interior15, alt: 'Stor dusch med bänk' },
+  { src: interior16, alt: 'Planritning över stugans ytor' },
+  { src: interior17, alt: '3D-vy över entréplan' },
+  { src: interior18, alt: '3D-vy över ovanvåningen' },
 ];
 
 export const CabinSection = () => {
@@ -217,6 +217,7 @@ export const CabinSection = () => {
           {/* Close button */}
           <button
             onClick={() => setSelectedImage(null)}
+            aria-label="Stäng bildvisning"
             className="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <X className="w-6 h-6" />
@@ -225,6 +226,7 @@ export const CabinSection = () => {
           {/* Previous button */}
           <button
             onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+            aria-label="Föregående bild"
             className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
@@ -233,6 +235,7 @@ export const CabinSection = () => {
           {/* Next button */}
           <button
             onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+            aria-label="Nästa bild"
             className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />

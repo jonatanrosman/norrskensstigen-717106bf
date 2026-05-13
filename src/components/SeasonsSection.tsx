@@ -261,7 +261,7 @@ export const SeasonsSection = () => {
           {currentGalleryForLightbox.map((image, index) => (
             <div key={`${activeSeason}-${index}`} className="cursor-pointer group" onClick={() => openLightbox(index)}>
               <div className="relative rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300">
-                <img src={image} alt="" className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img src={image} alt={`${currentSeason.name} vid Norrskensstigen, bild ${index + 1}`} className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
             </div>
           ))}
@@ -274,11 +274,12 @@ export const SeasonsSection = () => {
           className="fixed inset-0 z-50 bg-white/60 backdrop-blur-md flex items-center justify-center touch-none"
           onClick={closeLightbox}
         >
-          <button onClick={closeLightbox} className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur flex items-center justify-center">
+          <button onClick={closeLightbox} aria-label="Stäng bildvisning" className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur flex items-center justify-center">
             <X className="w-6 h-6" />
           </button>
           <button 
             onClick={(e) => { e.stopPropagation(); goToPrevious(); }} 
+            aria-label="Föregående bild"
             className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
@@ -302,7 +303,7 @@ export const SeasonsSection = () => {
                   slideDirection === 'right' && "animate-[slideInRight_0.3s_ease-out]"
                 )}
                 onClick={(e) => e.stopPropagation()} 
-                alt=""
+                alt={`${currentSeason.name} vid Norrskensstigen, bild ${currentImageIndex + 1}`}
                 draggable={false}
               />
             </div>
@@ -310,6 +311,7 @@ export const SeasonsSection = () => {
           
           <button 
             onClick={(e) => { e.stopPropagation(); goToNext(); }} 
+            aria-label="Nästa bild"
             className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/50 backdrop-blur text-foreground flex items-center justify-center hover:bg-white/70 transition-colors"
           >
             <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />

@@ -153,6 +153,7 @@ export const LocationSection = () => {
         >
           <button
             onClick={() => setLightboxOpen(false)}
+            aria-label="Stäng pistkartan"
             className="absolute top-4 right-4 p-2 text-foreground/80 hover:text-foreground transition-colors z-10 w-12 h-12 rounded-full bg-white/50 backdrop-blur flex items-center justify-center"
           >
             <X className="w-6 h-6" />
