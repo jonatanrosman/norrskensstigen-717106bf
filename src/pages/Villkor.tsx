@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Header } from '@/components/Header';
@@ -66,6 +67,13 @@ const VillkorContent = () => {
 const Villkor = () => {
   return (
     <LanguageProvider>
+      <Helmet>
+        <title>Bokningsvillkor | Norrskensstigen</title>
+        <meta name="description" content="Bokningsvillkor för Norrskensstigen i Stöten — betalning, avbokning, in- och utcheckning samt husregler." />
+        <link rel="canonical" href="https://norrskensstigen.lovable.app/villkor" />
+        <meta property="og:title" content="Bokningsvillkor | Norrskensstigen" />
+        <meta property="og:url" content="https://norrskensstigen.lovable.app/villkor" />
+      </Helmet>
       <div className="min-h-screen bg-background">
         <Header />
         <VillkorContent />
