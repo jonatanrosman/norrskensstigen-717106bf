@@ -1,34 +1,38 @@
+## What you're asking
 
+1. Remember the current winter 2026/2027 pricing so we can restore it later.
+2. Revert the site's pricing back to the previous 2025/2026 season as it was.
 
-## Plan: Improve Contact Form Error Handling and Notification
+## 1. Save 26/27 pricing to project memory
 
-The request has two parts:
+I'll write a new memory file `mem://features/winter-2026-2027-pricing` with the full week list (weeks 50–14), Saturday-to-Saturday dates, prices in SEK, statuses, and notes (Grand opening, Julveckan, Nyårsveckan, Sportlov, Påsk), plus the summer/spring/autumn rates. I'll add a reference to it in `mem://index.md` under Memories. This preserves the 26/27 data even after we roll the UI back to 25/26.
 
-1. **Show a clear error message to the user when the email fails** — the form already has basic error handling (lines 142-148 in ContactForm.tsx), but it catches all errors with the same generic message. We should improve it to show the actual error detail from the API response (e.g. domain verification failed).
+## 2. Reverting to the 25/26 season
 
-2. **Notify you (the site owner) when the contact form is broken** — add a fallback notification mechanism so you know if emails are failing silently.
+I do not rewrite prior state by hand — that's what your built-in history is for, and it's the safe way to get an exact byte-for-byte restore of the old pricing (plus anything else that was in the file at that point).
 
-### Implementation Steps
+Two options:
 
-**1. Improve error handling in ContactForm.tsx**
-- Parse the API error response body to extract `details` or `error` message from the Vercel function
-- Show a more descriptive error toast to the user, including a fallback contact email
+**Option A — Revert from chat history:** scroll back to the assistant message right before the "Nu är säsongen över…" turn (the one where the table still showed weeks 51–16 of 2025/2026 with the original bookings and week 15 discount reversed) and click the revert button on that message.
 
-**2. Improve error response in `api/send-email.ts`**
-- Return the Resend error details more clearly in the response so the frontend can display them
-- Add the Resend error message to the response JSON
+**Option B — Use the History tab:**
 
-**3. Add a fallback notification edge function (`notify-form-error`)**
-- Create a new edge function that sends a simple notification to your email (info@norrskensstigen.se) using a different method when the primary email fails
-- The Vercel API function will call this edge function as a fallback when Resend fails, so you get alerted
+<presentation-actions>
+  <presentation-open-history>View History</presentation-open-history>
+</presentation-actions>
 
-**4. Update the Vercel API to call the fallback on failure**
-- In the catch block of `api/send-email.ts`, call the edge function to notify you that the form is broken, including the error reason and the customer's details so you don't lose the inquiry
+Pick the version from just before we updated to the 26/27 season.
 
-### Technical Details
+## Important caveats before you revert
 
-- The fallback notification will use the existing Supabase edge function infrastructure
-- The edge function will store failed submissions in a database table (`failed_contact_submissions`) so no inquiries are lost even if both email paths fail
-- The ContactForm will show the specific error from Resend (e.g. "Domain verification failed") rather than just "Något gick fel"
-- A database table `failed_contact_submissions` will store: name, email, phone, message, check_in_date, error_reason, created_at — so you can check for any lost inquiries
+Reverting rolls back **all** file changes made after that point, not only `PricingSection.tsx`. Since then, we also:
 
+- Added the MCP server (package install, `src/lib/mcp/**`, `vite.config.ts` plugin, deployed `supabase/functions/mcp`).
+- Did the SEO pass (`react-helmet-async` install, `HelmetProvider` in `main.tsx`, Helmet tags in `Index.tsx` / `Villkor.tsx`, `public/sitemap.xml`, `public/llms.txt`, updated `public/robots.txt`, `index.html` title, accessibility tweaks in Hero/Cabin/Seasons/Location sections).
+
+A revert to pre-26/27 pricing would undo those too. If you want to keep MCP and SEO, tell me and I'll instead re-enter the 25/26 pricing table directly in `PricingSection.tsx` from the saved memory of that season — but I'll need to reconstruct the 25/26 values (they're in older chat history; I'll recall them before editing). Just tell me which path you want:
+
+- **Revert (clean rollback, loses MCP + SEO work)** — you click the revert button; nothing for me to code.
+- **Surgical rollback (keep MCP + SEO)** — I save the 26/27 memory, recall the 25/26 pricing from chat history, and rewrite only the pricing table.
+
+Either way, step 1 (saving 26/27 to memory) happens first so nothing is lost.
