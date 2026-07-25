@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "norrskensstigen-mcp",
+      "version": "0.1.0",
+      "title": "Norrskensstigen MCP"
+    },
+    "tools": [
+      {
+        "name": "get_cabin_info",
+        "title": "Get cabin info",
+        "description": "Returns key facts about the Norrskensstigen cabin: location, capacity, sleeping arrangements, ski access, and amenities.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_winter_pricing",
+        "title": "Get winter pricing and availability",
+        "description": "Returns the full winter season 2026/2027 pricing table with week number, dates, price in SEK, and booking status (Saturday-to-Saturday, 7-night stays). Optionally filter by status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "description": "Filter to only available, only booked, or all weeks. Defaults to All.",
+              "type": "string",
+              "enum": [
+                "Available",
+                "Booked",
+                "All"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_summer_pricing",
+        "title": "Get spring/summer/autumn pricing",
+        "description": "Returns pricing for the non-winter season (spring, summer, autumn) at Norrskensstigen.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_contact_info",
+        "title": "Get contact info",
+        "description": "Returns contact information for booking inquiries at Norrskensstigen.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
