@@ -87,6 +87,8 @@ const inventoryData: InventoryCategory[] = [
       { sv: 'Bålpanna med grillgaller', en: 'Fire pit with grill grate', de: 'Feuerschale mit Grillrost' },
       { sv: 'En liten kolgrill', en: 'Small charcoal grill', de: 'Kleiner Holzkohlegrill' },
       { sv: 'Pulka', en: 'Sled', de: 'Schlitten' },
+      { sv: 'Bärplockare', en: 'Berry picker', de: 'Beerenpflücker' },
+      { sv: 'Hink', en: 'Bucket', de: 'Eimer' },
       { sv: 'Lås till skidförrådet', en: 'Lock for ski storage', de: 'Schloss für Skiaufbewahrung' },
     ],
   },
