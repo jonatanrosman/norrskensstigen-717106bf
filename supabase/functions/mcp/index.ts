@@ -47,7 +47,7 @@ var winterPricing = [
   { week: 53, dates: "26/12 2026 - 2/1 2027", priceSek: 29e3, status: "Available", note: "Ny\xE5rsveckan (New Year week)" },
   { week: 1, dates: "2/1 - 9/1 2027", priceSek: 13795, status: "Booked" },
   { week: 2, dates: "9/1 - 16/1 2027", priceSek: 10095, status: "Booked" },
-  { week: 3, dates: "16/1 - 23/1 2027", priceSek: 11e3, status: "Available" },
+  { week: 3, dates: "16/1 - 23/1 2027", priceSek: 11e3, status: "Booked" },
   { week: 4, dates: "23/1 - 30/1 2027", priceSek: 15500, status: "Available" },
   { week: 5, dates: "30/1 - 6/2 2027", priceSek: 17500, status: "Booked" },
   { week: 6, dates: "6/2 - 13/2 2027", priceSek: 19500, status: "Booked" },
