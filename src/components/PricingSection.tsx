@@ -9,7 +9,7 @@ const winterPricing = [
   { week: 53, dates: '26/12 2026 - 2/1 2027', priceKr: '29 000 kr', priceSek: '29 000 SEK', status: 'Ledig', note: 'Nyårsveckan' },
   { week: 1, dates: '2/1 - 9/1 2027', priceKr: '13 795 kr', priceSek: '13 795 SEK', status: 'Bokad' },
   { week: 2, dates: '9/1 - 16/1 2027', priceKr: '10 095 kr', priceSek: '10 095 SEK', status: 'Bokad' },
-  { week: 3, dates: '16/1 - 23/1 2027', priceKr: '11 000 kr', priceSek: '11 000 SEK', status: 'Ledig' },
+  { week: 3, dates: '16/1 - 23/1 2027', priceKr: '11 000 kr', priceSek: '11 000 SEK', status: 'Bokad' },
   { week: 4, dates: '23/1 - 30/1 2027', priceKr: '15 500 kr', priceSek: '15 500 SEK', status: 'Ledig' },
   { week: 5, dates: '30/1 - 6/2 2027', priceKr: '17 500 kr', priceSek: '17 500 SEK', status: 'Bokad' },
   { week: 6, dates: '6/2 - 13/2 2027', priceKr: '19 500 kr', priceSek: '19 500 SEK', status: 'Bokad' },
