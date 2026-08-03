@@ -14,7 +14,7 @@ export const Footer = () => {
 
   const termsLabel = language === 'sv' ? 'Bokningsvillkor' : language === 'de' ? 'Buchungsbedingungen' : 'Booking Terms';
 
-  const handleTermsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleTermsClick = () => {
     // Let the router handle navigation, then scroll to top
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
