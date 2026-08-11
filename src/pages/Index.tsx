@@ -18,9 +18,9 @@ const Index = () => {
       <Helmet>
         <title>Norrskensstigen | Ski-in/Ski-out stuga i Stöten</title>
         <meta name="description" content="Lyxig timmerstuga i Granfjällsbyn, Stöten. Ski-in/Ski-out, 12 bäddar, bastu och fjällutsikt — perfekt för skidåkning och fjällsemester." />
-        <link rel="canonical" href="https://norrskensstigen.lovable.app/" />
+        <link rel="canonical" href="https://www.norrskensstigen.se/" />
         <meta property="og:title" content="Norrskensstigen | Ski-in/Ski-out stuga i Stöten" />
-        <meta property="og:url" content="https://norrskensstigen.lovable.app/" />
+        <meta property="og:url" content="https://www.norrskensstigen.se/" />
       </Helmet>
       <div className="min-h-screen">
         <Header />

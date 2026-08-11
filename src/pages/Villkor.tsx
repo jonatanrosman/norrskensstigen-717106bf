@@ -70,9 +70,9 @@ const Villkor = () => {
       <Helmet>
         <title>Bokningsvillkor | Norrskensstigen</title>
         <meta name="description" content="Bokningsvillkor för Norrskensstigen i Stöten — betalning, avbokning, in- och utcheckning samt husregler." />
-        <link rel="canonical" href="https://norrskensstigen.lovable.app/villkor" />
+        <link rel="canonical" href="https://www.norrskensstigen.se/villkor" />
         <meta property="og:title" content="Bokningsvillkor | Norrskensstigen" />
-        <meta property="og:url" content="https://norrskensstigen.lovable.app/villkor" />
+        <meta property="og:url" content="https://www.norrskensstigen.se/villkor" />
       </Helmet>
       <div className="min-h-screen bg-background">
         <Header />
