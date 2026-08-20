@@ -1,5 +1,6 @@
 {
   "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/priser-bokning.html", "destination": "/", "permanent": true },
     { "source": "/villkor.html", "destination": "/", "permanent": true },
     { "source": "/vinter.html", "destination": "/", "permanent": true },
