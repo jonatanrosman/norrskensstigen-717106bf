@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 const winterPricing = [
   { week: 50, dates: '5/12 - 12/12 2026', priceKr: '6 500 kr', priceSek: '6 500 SEK', status: 'Ledig', note: 'Grand opening' },
   { week: 51, dates: '12/12 - 19/12 2026', priceKr: '9 000 kr', priceSek: '9 000 SEK', status: 'Ledig' },
-  { week: 52, dates: '19/12 - 26/12 2026', priceKr: '27 500 kr', priceSek: '27 500 SEK', status: 'Ledig', note: 'Julveckan' },
+  { week: 52, dates: '19/12 - 26/12 2026', priceKr: '27 500 kr', priceSek: '27 500 SEK', status: 'Bokad', note: 'Julveckan' },
   { week: 53, dates: '26/12 2026 - 2/1 2027', priceKr: '29 000 kr', priceSek: '29 000 SEK', status: 'Ledig', note: 'Nyårsveckan' },
   { week: 1, dates: '2/1 - 9/1 2027', priceKr: '15 000 kr', priceSek: '15 000 SEK', status: 'Bokad' },
   { week: 2, dates: '9/1 - 16/1 2027', priceKr: '11 000 kr', priceSek: '11 000 SEK', status: 'Bokad' },
@@ -24,11 +24,10 @@ const winterPricing = [
 ];
 
 export const PricingSection = () => {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
 
   const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2026/2027' : language === 'de' ? 'Preise Wintersaison 2026/2027' : 'Winter Season 2026/2027 Pricing';
   const summerPricingTitle = language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn';
-  const cleaningIncluded = language === 'sv' ? 'Slutstädning är inkluderat i priset.' : language === 'de' ? 'Endreinigung ist im Preis inbegriffen.' : 'Final cleaning is included in the price.';
   const weekLabel = language === 'sv' ? 'Vecka' : language === 'de' ? 'Woche' : 'Week';
   const statusBooked = language === 'sv' ? 'Bokad' : language === 'de' ? 'Gebucht' : 'Booked';
   const statusAvailable = language === 'sv' ? 'Ledig' : language === 'de' ? 'Verfügbar' : 'Available';
@@ -48,9 +47,9 @@ export const PricingSection = () => {
             {/* Winter Pricing */}
             <div className="bg-card rounded-3xl p-6 md:p-8 shadow-elevated">
               <h3 className="font-serif text-2xl text-foreground mb-4">{pricingTitle}</h3>
-              <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
-                <Info className="w-4 h-4" />
-                {cleaningIncluded}
+              <p className="text-sm text-muted-foreground mb-4 flex items-start gap-2">
+                <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>{t.booking.cleaningNote}</span>
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">

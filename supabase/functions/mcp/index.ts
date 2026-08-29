@@ -43,7 +43,7 @@ import { z } from "npm:zod@^4.4.3";
 var winterPricing = [
   { week: 50, dates: "5/12 - 12/12 2026", priceSek: 6500, status: "Available", note: "Grand opening" },
   { week: 51, dates: "12/12 - 19/12 2026", priceSek: 9e3, status: "Available" },
-  { week: 52, dates: "19/12 - 26/12 2026", priceSek: 27500, status: "Available", note: "Julveckan (Christmas week)" },
+  { week: 52, dates: "19/12 - 26/12 2026", priceSek: 27500, status: "Booked", note: "Julveckan (Christmas week)" },
   { week: 53, dates: "26/12 2026 - 2/1 2027", priceSek: 29e3, status: "Available", note: "Ny\xE5rsveckan (New Year week)" },
   { week: 1, dates: "2/1 - 9/1 2027", priceSek: 15e3, status: "Booked" },
   { week: 2, dates: "9/1 - 16/1 2027", priceSek: 11e3, status: "Booked" },
@@ -51,7 +51,7 @@ var winterPricing = [
   { week: 4, dates: "23/1 - 30/1 2027", priceSek: 15500, status: "Available" },
   { week: 5, dates: "30/1 - 6/2 2027", priceSek: 17500, status: "Booked" },
   { week: 6, dates: "6/2 - 13/2 2027", priceSek: 19500, status: "Booked" },
-  { week: 7, dates: "13/2 - 20/2 2027", priceSek: 28e3, status: "Available", note: "Sportlov" },
+  { week: 7, dates: "13/2 - 20/2 2027", priceSek: 28e3, status: "Booked", note: "Sportlov" },
   { week: 8, dates: "20/2 - 27/2 2027", priceSek: 28e3, status: "Available", note: "Sportlov" },
   { week: 9, dates: "27/2 - 6/3 2027", priceSek: 28e3, status: "Available", note: "Sportlov" },
   { week: 10, dates: "6/3 - 13/3 2027", priceSek: 21e3, status: "Available", note: "Sportlov" },

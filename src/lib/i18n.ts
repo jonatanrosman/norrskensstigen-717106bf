@@ -66,6 +66,7 @@ export const translations = {
       winterNotice: 'Under vintersäsongen (13 dec - 19 apr) bokas stugan endast per vecka, lördag-lördag.',
       winterSeason: 'Vintersäsong',
       otherSeason: 'Övrig säsong',
+      cleaningNote: 'Priset inkluderar obligatorisk avresestädning efter preliminärt RUT-avdrag. Vid bokning utan RUT tillkommer för närvarande 1 108 kronor.',
     },
     location: {
       title: 'Hitta hit',
@@ -105,6 +106,7 @@ export const translations = {
         items: [
           'I samband med bokning betalas en handpenning om 800:-',
           'Senast 45 dagar innan vistelsens start betalas resterande belopp.',
+          'Priset inkluderar obligatorisk avresestädning efter preliminärt RUT-avdrag. Vid bokning utan RUT tillkommer för närvarande 1 108 kronor.',
         ],
       },
       cancellation: {
@@ -208,6 +210,7 @@ export const translations = {
       winterNotice: 'During winter season (Dec 13 - Apr 19) the cabin is only available for weekly bookings, Saturday-Saturday.',
       winterSeason: 'Winter Season',
       otherSeason: 'Other Season',
+      cleaningNote: 'The price includes mandatory final cleaning after preliminary RUT deduction. If booking without RUT, an additional 1,108 SEK currently applies.',
     },
     location: {
       title: 'Getting here',
@@ -247,6 +250,7 @@ export const translations = {
         items: [
           'A booking fee of 800 SEK is paid upon booking.',
           'The remaining amount is paid no later than 45 days before the start of your stay.',
+          'The price includes mandatory final cleaning after preliminary RUT deduction. If booking without RUT, an additional 1,108 SEK currently applies.',
         ],
       },
       cancellation: {
@@ -350,6 +354,7 @@ export const translations = {
       winterNotice: 'In der Wintersaison (13. Dez - 19. Apr) ist die Hütte nur wöchentlich buchbar, Samstag-Samstag.',
       winterSeason: 'Wintersaison',
       otherSeason: 'Andere Saison',
+      cleaningNote: 'Der Preis beinhaltet die obligatorische Abreinigung nach vorläufigem RUT-Abzug. Bei Buchung ohne RUT werden derzeit 1.108 SEK zusätzlich berechnet.',
     },
     location: {
       title: 'Anfahrt',
@@ -389,6 +394,7 @@ export const translations = {
         items: [
           'Bei der Buchung wird eine Buchungsgebühr von 800 SEK fällig.',
           'Der Restbetrag ist spätestens 45 Tage vor Beginn Ihres Aufenthalts zu zahlen.',
+          'Der Preis beinhaltet die obligatorische Abreinigung nach vorläufigem RUT-Abzug. Bei Buchung ohne RUT werden derzeit 1.108 SEK zusätzlich berechnet.',
         ],
       },
       cancellation: {
