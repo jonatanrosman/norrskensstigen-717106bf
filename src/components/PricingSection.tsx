@@ -24,11 +24,10 @@ const winterPricing = [
 ];
 
 export const PricingSection = () => {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
 
   const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2026/2027' : language === 'de' ? 'Preise Wintersaison 2026/2027' : 'Winter Season 2026/2027 Pricing';
   const summerPricingTitle = language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn';
-  const cleaningIncluded = language === 'sv' ? 'Slutstädning är inkluderat i priset.' : language === 'de' ? 'Endreinigung ist im Preis inbegriffen.' : 'Final cleaning is included in the price.';
   const weekLabel = language === 'sv' ? 'Vecka' : language === 'de' ? 'Woche' : 'Week';
   const statusBooked = language === 'sv' ? 'Bokad' : language === 'de' ? 'Gebucht' : 'Booked';
   const statusAvailable = language === 'sv' ? 'Ledig' : language === 'de' ? 'Verfügbar' : 'Available';
@@ -48,9 +47,9 @@ export const PricingSection = () => {
             {/* Winter Pricing */}
             <div className="bg-card rounded-3xl p-6 md:p-8 shadow-elevated">
               <h3 className="font-serif text-2xl text-foreground mb-4">{pricingTitle}</h3>
-              <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
-                <Info className="w-4 h-4" />
-                {cleaningIncluded}
+              <p className="text-sm text-muted-foreground mb-4 flex items-start gap-2">
+                <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>{t.booking.cleaningNote}</span>
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
