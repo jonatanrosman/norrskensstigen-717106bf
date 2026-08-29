@@ -1,30 +1,28 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
-const winterPricing = [
-  { week: 50, dates: '5/12 - 12/12 2026', priceKr: '6 500 kr', priceSek: '6 500 SEK', status: 'Ledig', note: 'Grand opening' },
-  { week: 51, dates: '12/12 - 19/12 2026', priceKr: '9 000 kr', priceSek: '9 000 SEK', status: 'Ledig' },
-  { week: 52, dates: '19/12 - 26/12 2026', priceKr: '27 500 kr', priceSek: '27 500 SEK', status: 'Bokad', note: 'Julveckan' },
-  { week: 53, dates: '26/12 2026 - 2/1 2027', priceKr: '29 000 kr', priceSek: '29 000 SEK', status: 'Ledig', note: 'Nyårsveckan' },
-  { week: 1, dates: '2/1 - 9/1 2027', priceKr: '15 000 kr', priceSek: '15 000 SEK', status: 'Bokad' },
-  { week: 2, dates: '9/1 - 16/1 2027', priceKr: '11 000 kr', priceSek: '11 000 SEK', status: 'Bokad' },
-  { week: 3, dates: '16/1 - 23/1 2027', priceKr: '11 000 kr', priceSek: '11 000 SEK', status: 'Bokad' },
-  { week: 4, dates: '23/1 - 30/1 2027', priceKr: '15 500 kr', priceSek: '15 500 SEK', status: 'Ledig' },
-  { week: 5, dates: '30/1 - 6/2 2027', priceKr: '17 500 kr', priceSek: '17 500 SEK', status: 'Bokad' },
-  { week: 6, dates: '6/2 - 13/2 2027', priceKr: '19 500 kr', priceSek: '19 500 SEK', status: 'Bokad' },
-  { week: 7, dates: '13/2 - 20/2 2027', priceKr: '28 000 kr', priceSek: '28 000 SEK', status: 'Bokad', note: 'Sportlov' },
-  { week: 8, dates: '20/2 - 27/2 2027', priceKr: '28 000 kr', priceSek: '28 000 SEK', status: 'Ledig', note: 'Sportlov' },
-  { week: 9, dates: '27/2 - 6/3 2027', priceKr: '28 000 kr', priceSek: '28 000 SEK', status: 'Ledig', note: 'Sportlov' },
-  { week: 10, dates: '6/3 - 13/3 2027', priceKr: '21 000 kr', priceSek: '21 000 SEK', status: 'Ledig', note: 'Sportlov' },
-  { week: 11, dates: '13/3 - 20/3 2027', priceKr: '19 500 kr', priceSek: '19 500 SEK', status: 'Bokad' },
-  { week: 12, dates: '20/3 - 27/3 2027', priceKr: '23 500 kr', priceSek: '23 500 SEK', status: 'Ledig', note: 'Påsk' },
-  { week: 13, dates: '27/3 - 3/4 2027', priceKr: '23 500 kr', priceSek: '23 500 SEK', status: 'Ledig', note: 'Påsk' },
-  { week: 14, dates: '3/4 - 11/4 2027', priceKr: '14 000 kr', priceSek: '14 000 SEK', status: 'Ledig' },
-];
+const formatPrice = (priceSek: number, language: 'sv' | 'en' | 'de') =>
+  language === 'sv'
+    ? `${priceSek.toLocaleString('sv-SE')} kr`
+    : `${priceSek.toLocaleString('sv-SE')} SEK`;
 
 export const PricingSection = () => {
   const { t, language } = useLanguage();
+
+  const { data: winterPricing = [] } = useQuery({
+    queryKey: ['winter-weeks'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('winter_weeks')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const pricingTitle = language === 'sv' ? 'Priser vintersäsong 2026/2027' : language === 'de' ? 'Preise Wintersaison 2026/2027' : 'Winter Season 2026/2027 Pricing';
   const summerPricingTitle = language === 'sv' ? 'Vår, sommar & höst' : language === 'de' ? 'Frühling, Sommer & Herbst' : 'Spring, Summer & Autumn';
@@ -72,16 +70,16 @@ export const PricingSection = () => {
                           </div>
                         </td>
                         <td className="py-2 text-right">
-                          <span className="font-medium text-foreground">{language === 'sv' ? row.priceKr : row.priceSek}</span>
+                          <span className="font-medium text-foreground">{formatPrice(row.price_sek, language)}</span>
                         </td>
                         <td className="py-2 text-right">
                           <span
                             className={cn(
                               "px-2 py-0.5 rounded-full text-xs font-medium",
-                              row.status === 'Ledig' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                              row.status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                             )}
                           >
-                            {row.status === 'Ledig' ? statusAvailable : statusBooked}
+                            {row.status === 'Available' ? statusAvailable : statusBooked}
                           </span>
                         </td>
                       </tr>

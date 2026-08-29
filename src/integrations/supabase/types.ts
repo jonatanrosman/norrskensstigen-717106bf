@@ -47,6 +47,39 @@ export type Database = {
         }
         Relationships: []
       }
+      winter_weeks: {
+        Row: {
+          dates: string
+          id: string
+          note: string | null
+          price_sek: number
+          sort_order: number
+          status: string
+          updated_at: string
+          week: number
+        }
+        Insert: {
+          dates: string
+          id?: string
+          note?: string | null
+          price_sek: number
+          sort_order: number
+          status?: string
+          updated_at?: string
+          week: number
+        }
+        Update: {
+          dates?: string
+          id?: string
+          note?: string | null
+          price_sek?: number
+          sort_order?: number
+          status?: string
+          updated_at?: string
+          week?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
