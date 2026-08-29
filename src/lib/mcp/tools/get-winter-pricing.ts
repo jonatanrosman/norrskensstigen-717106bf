@@ -12,7 +12,7 @@ const winterPricing = [
   { week: 4, dates: "23/1 - 30/1 2027", priceSek: 15500, status: "Available" },
   { week: 5, dates: "30/1 - 6/2 2027", priceSek: 17500, status: "Booked" },
   { week: 6, dates: "6/2 - 13/2 2027", priceSek: 19500, status: "Booked" },
-  { week: 7, dates: "13/2 - 20/2 2027", priceSek: 28000, status: "Available", note: "Sportlov" },
+  { week: 7, dates: "13/2 - 20/2 2027", priceSek: 28000, status: "Booked", note: "Sportlov" },
   { week: 8, dates: "20/2 - 27/2 2027", priceSek: 28000, status: "Available", note: "Sportlov" },
   { week: 9, dates: "27/2 - 6/3 2027", priceSek: 28000, status: "Available", note: "Sportlov" },
   { week: 10, dates: "6/3 - 13/3 2027", priceSek: 21000, status: "Available", note: "Sportlov" },
