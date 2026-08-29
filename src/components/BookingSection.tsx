@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { format, addDays, isSaturday, nextSaturday, isWithinInterval, startOfDay } from 'date-fns';
 import { sv, enUS, de } from 'date-fns/locale';
-import { CalendarIcon, Users, RefreshCw, ExternalLink, AlertCircle } from 'lucide-react';
+import { CalendarIcon, Users, RefreshCw, ExternalLink, AlertCircle, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Winter season dates (these could be made configurable)
@@ -116,10 +116,18 @@ export const BookingSection = () => {
           </div>
 
           {/* Winter Season Notice */}
-          <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-4 mb-6 flex items-start gap-3">
+          <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-4 mb-4 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-primary-foreground/80 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-primary-foreground/80">
               {t.booking.winterNotice}
+            </p>
+          </div>
+
+          {/* Cleaning / RUT Notice */}
+          <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-4 mb-6 flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-primary-foreground/80 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-primary-foreground/80">
+              {t.booking.cleaningNote}
             </p>
           </div>
 
