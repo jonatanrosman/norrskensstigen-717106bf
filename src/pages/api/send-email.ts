@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createBookingDraft } from './_lib/createBookingDraft';
 
 // Use environment variable for API key
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -21,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { name, email, phone, message, checkInDate } = req.body;
+    const { name, email, phone, message, checkInDate, checkInDateISO, language } = req.body;
 
     if (!name || !email || !phone || !message) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -58,6 +59,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html: htmlContent,
       text: textContent,
     });
+
+    // Best-effort: creates an Apple Mail draft for Jonatan to review and
+    // send himself. Never blocks or fails the response above — errors are
+    // logged inside createBookingDraft and swallowed there.
+    await createBookingDraft({ name, email, phone, message, checkInDate, checkInDateISO, language });
 
     return res.status(200).json({ success: true, data });
   } catch (error) {

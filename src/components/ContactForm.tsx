@@ -7,12 +7,13 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/hooks/use-toast';
 import { Send, CalendarIcon, Info } from 'lucide-react';
-import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay, parse } from 'date-fns';
+import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay } from 'date-fns';
 import { sv, enGB, de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { parseWeekStartDate } from '@/lib/weekDates';
 
 const WINTER_SEASONS = [
   { start: new Date(2025, 11, 13), end: new Date(2026, 3, 19) }, // Dec 13, 2025 - Apr 19, 2026
@@ -86,19 +87,9 @@ export const ContactForm = () => {
   };
 
   const bookedWinterCheckInDays = useMemo(() => {
-    const parseStartDate = (range: string) => {
-      const [startPartRaw] = range.split('-');
-      const startPart = (startPartRaw || '').trim();
-      const years = (range.match(/\b\d{4}\b/g) || []).map((y) => Number(y));
-      const yearFromStart = (startPart.match(/\b\d{4}\b/) || [])[0];
-      const year = yearFromStart ? Number(yearFromStart) : years[0];
-      const dm = startPart.replace(/\b\d{4}\b/, '').trim();
-      return parse(`${dm} ${year}`, 'd/M yyyy', new Date());
-    };
-
     return winterWeeks
       .filter((row) => row.status === 'Booked')
-      .map((row) => startOfDay(parseStartDate(row.dates)))
+      .map((row) => startOfDay(parseWeekStartDate(row.dates)))
       .filter((d) => !Number.isNaN(d.getTime()));
   }, [winterWeeks]);
 
@@ -129,6 +120,11 @@ export const ContactForm = () => {
           phone: formData.phone,
           message: formData.message,
           checkInDate: checkInDate ? format(checkInDate, 'PPP', { locale: dateLocale }) : undefined,
+          // Date-only (yyyy-MM-dd), deliberately not toISOString(): that
+          // converts to UTC and can shift the calendar day backwards for
+          // timezones ahead of UTC (e.g. Swedish winter time, UTC+1).
+          checkInDateISO: checkInDate ? format(checkInDate, 'yyyy-MM-dd') : undefined,
+          language,
         }),
       });
 
