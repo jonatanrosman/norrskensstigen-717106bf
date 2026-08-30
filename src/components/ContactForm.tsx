@@ -12,6 +12,7 @@ import { sv, enGB, de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const WINTER_SEASONS = [
   { start: new Date(2025, 11, 13), end: new Date(2026, 3, 19) }, // Dec 13, 2025 - Apr 19, 2026
@@ -20,15 +21,22 @@ const WINTER_SEASONS = [
 
 const isWinterSeason = (date: Date): boolean => {
   return WINTER_SEASONS.some(
-    (season) => isAfter(date, season.start) && isBefore(date, season.end) || 
+    (season) => isAfter(date, season.start) && isBefore(date, season.end) ||
                 date.getTime() === season.start.getTime() ||
                 date.getTime() === season.end.getTime()
   );
 };
 
+const getUpcomingWinterSeasonStart = (): Date => {
+  const today = startOfDay(new Date());
+  const season = WINTER_SEASONS.find((s) => !isBefore(s.end, today)) ?? WINTER_SEASONS[WINTER_SEASONS.length - 1];
+  return season.start;
+};
+
 export const ContactForm = () => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [checkInDate, setCheckInDate] = useState<Date | undefined>();
   const [formData, setFormData] = useState({
@@ -159,7 +167,7 @@ export const ContactForm = () => {
   };
 
   const checkInLabel = language === 'sv' ? 'Önskat ankomstdatum' : language === 'de' ? 'Gewünschtes Anreisedatum' : 'Preferred check-in date';
-  const winterNotice = language === 'sv' ? 'Vintersäsong: Endast lördagar (lördag-lördag)' : language === 'de' ? 'Wintersaison: Nur Samstage (Samstag-Samstag)' : 'Winter season: Saturdays only (Saturday-Saturday)';
+  const winterNotice = language === 'sv' ? 'Vintersäsong: Bara veckovis lördag - lördag' : language === 'de' ? 'Wintersaison: Nur Samstage (Samstag-Samstag)' : 'Winter season: Saturdays only (Saturday-Saturday)';
 
   return (
     <section id="contact" className="py-24 md:py-32 bg-card">
@@ -200,7 +208,20 @@ export const ContactForm = () => {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={checkInDate} onSelect={handleCheckInSelect} disabled={disabledDays} locale={dateLocale} initialFocus showWeekNumber className="pointer-events-auto" />
+                  <Calendar
+                    mode="single"
+                    selected={checkInDate}
+                    onSelect={handleCheckInSelect}
+                    disabled={disabledDays}
+                    locale={dateLocale}
+                    initialFocus
+                    showWeekNumber
+                    fixedWeeks
+                    numberOfMonths={isMobile ? 1 : 2}
+                    pagedNavigation
+                    defaultMonth={getUpcomingWinterSeasonStart()}
+                    className="pointer-events-auto"
+                  />
                 </PopoverContent>
               </Popover>
               {isWinter && (
