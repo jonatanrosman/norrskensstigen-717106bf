@@ -10,9 +10,12 @@ import { Send, CalendarIcon, Info } from 'lucide-react';
 import { format, isSaturday, nextSaturday, isAfter, isBefore, startOfDay, parse } from 'date-fns';
 import { sv, enGB, de } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 const WINTER_SEASONS = [
-  { start: new Date(2025, 11, 13), end: new Date(2026, 3, 19) },
+  { start: new Date(2025, 11, 13), end: new Date(2026, 3, 19) }, // Dec 13, 2025 - Apr 19, 2026
+  { start: new Date(2026, 11, 12), end: new Date(2027, 3, 18) }, // Dec 12, 2026 - Apr 18, 2027
 ];
 
 const isWinterSeason = (date: Date): boolean => {
@@ -22,27 +25,6 @@ const isWinterSeason = (date: Date): boolean => {
                 date.getTime() === season.end.getTime()
   );
 };
-
-const winterPricing = [
-  { week: 51, dates: '13/12 - 20/12 2025', status: 'Bokad' },
-  { week: 52, dates: '20/12 - 27/12 2025', status: 'Bokad' },
-  { week: 1, dates: '27/12 2025 - 3/1 2026', status: 'Bokad' },
-  { week: 2, dates: '3/1 - 10/1 2026', status: 'Bokad' },
-  { week: 3, dates: '10/1 - 17/1 2026', status: 'Bokad' },
-  { week: 4, dates: '17/1 - 24/1 2026', status: 'Ledig' },
-  { week: 5, dates: '24/1 - 31/1 2026', status: 'Bokad' },
-  { week: 6, dates: '31/1 - 7/2 2026', status: 'Bokad' },
-  { week: 7, dates: '7/2 - 14/2 2026', status: 'Bokad' },
-  { week: 8, dates: '14/2 - 21/2 2026', status: 'Bokad' },
-  { week: 9, dates: '21/2 - 28/2 2026', status: 'Bokad' },
-  { week: 10, dates: '28/2 - 7/3 2026', status: 'Bokad' },
-  { week: 11, dates: '7/3 - 14/3 2026', status: 'Bokad' },
-  { week: 12, dates: '14/3 - 21/3 2026', status: 'Bokad' },
-  { week: 13, dates: '21/3 - 28/3 2026', status: 'Ledig' },
-  { week: 14, dates: '28/3 - 4/4 2026', status: 'Ledig' },
-  { week: 15, dates: '4/4 - 11/4 2026', status: 'Ledig' },
-  { week: 16, dates: '11/4 - 19/4 2026', status: 'Ledig' },
-];
 
 export const ContactForm = () => {
   const { t, language } = useLanguage();
@@ -57,6 +39,18 @@ export const ContactForm = () => {
   });
 
   const dateLocale = language === 'sv' ? sv : language === 'de' ? de : enGB;
+
+  const { data: winterWeeks = [] } = useQuery({
+    queryKey: ['winter-weeks'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('winter_weeks')
+        .select('*')
+        .order('sort_order', { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const isWinter = useMemo(() => {
     if (!checkInDate) return false;
@@ -94,11 +88,11 @@ export const ContactForm = () => {
       return parse(`${dm} ${year}`, 'd/M yyyy', new Date());
     };
 
-    return winterPricing
-      .filter((row) => row.status === 'Bokad')
+    return winterWeeks
+      .filter((row) => row.status === 'Booked')
       .map((row) => startOfDay(parseStartDate(row.dates)))
       .filter((d) => !Number.isNaN(d.getTime()));
-  }, []);
+  }, [winterWeeks]);
 
   const disabledDays = (date: Date) => {
     const day = startOfDay(date);
