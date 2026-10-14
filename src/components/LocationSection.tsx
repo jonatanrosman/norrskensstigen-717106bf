@@ -1,6 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { MapPin, Plane, Mountain, Map, Car } from 'lucide-react';
-import skiSlopeMap from '@/assets/ski-slope-map.png';
+import skiSlopeMapAsset from '@/assets/ski-slope-map-2027.png.asset.json';
+const skiSlopeMap = skiSlopeMapAsset.url;
 import { useState } from 'react';
 import { X } from 'lucide-react';
 
