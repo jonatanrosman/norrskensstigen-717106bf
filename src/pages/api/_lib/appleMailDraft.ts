@@ -1,5 +1,5 @@
 import { ImapFlow } from 'imapflow';
-// @ts-expect-error -- no published types for this internal mail-composer path
+// @ts-ignore -- types may or may not be available for this internal path
 import MailComposer from 'nodemailer/lib/mail-composer';
 
 type CreateDraftParams = {
